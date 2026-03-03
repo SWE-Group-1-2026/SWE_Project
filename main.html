@@ -1,4 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <style>
+        @keyframes bounce{
+          
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .animated-pet{ 
+          
+            font-size: 50px; 
+            animation: bounce 1.5s infinite ease-in-out; 
+        }
+        .shadow{
+          
+            width: 40px;
+            height: 6px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            margin: 5px auto;
+            animation: shadow-shrink 1.5s infinite ease-in-out;
+        }
+        @keyframes shadow-shrink{
+            0%, 100% { transform: scale(1); opacity: 0.2; }
+            50% { transform: scale(0.6); opacity: 0.1; }
+        }
+        .container{ 
+          
+            display: flex; 
+            gap: 20px; 
+            padding: 20px; 
+            font-family: sans-serif; 
+            align-items: center;
+        }
+        .customizer{
+          
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .pet-card{ 
+          
+            border: 2px solid #ddd; 
+            padding: 20px; 
+            border-radius: 15px; 
+            text-align: center; 
+        }
+        .customizer input, .customizer select{
+          
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: white;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="customizer">
+        <h3>Customize Your Pet</h3>
+        <input type="text" id="nameInput" placeholder="Enter Pet Name..." oninput="updateName()">
+        <select id="speciesInput" onchange="updateSpecies()">
+          <option value="🐾">Select Species</option>
+          <option value="🐶">Dog</option>
+          <option value="🐱">Cat</option>
+        </select>
+        <select id="genderInput" onchange="updateGender()">
+          <option value="Not Set">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+      </div>
 
+      <div class="pet-card">
+        <div class="animation-container">
+          <div class="animated-pet">🐾</div> 
+          <div class="shadow"></div>
+        </div>
+    
+        <div class="pet-info">
+          <h2 id="displayName">Lucky</h2>
+          <p id="displayGender">Gender: Not Set</p>
+        </div>
+      </div>
+    </div>
+    <script>
+      function updateSpecies(){
+        
+        const val = document.getElementById('speciesInput').value;
+        document.querySelector('.animated-pet').innerText = val;
+      }
+      function updateName(){
+        
+        const val = document.getElementById('nameInput').value;
+        document.getElementById('displayName').innerText = val || "Lucky";
+      }
+      function updateGender(){
+        
+        const val = document.getElementById('genderInput').value;
+        document.getElementById('displayGender').innerText = `Gender: ${val}`;
+      }
+    </script>
+  </body>
 </html>
