@@ -9,8 +9,19 @@
         }
         .animated-pet{ 
           
-            font-size: 50px; 
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            font-size: 50px;
             animation: bounce 1.5s infinite ease-in-out; 
+        }
+        .animated-pet img{
+          
+            max-width: 100%;
+            max-height: 100%;
         }
         .shadow{
           
@@ -69,17 +80,19 @@
     <div class="container">
       <div class="customizer">
         <h3>Customize Your Pet</h3>
-        <input type="text" id="nameInput" placeholder="Enter Pet Name..." oninput="updateName()">
-        <select id="speciesInput" onchange="updateSpecies()">
-          <option value="🐾">Select Species</option>
-          <option value="🐶">Dog</option>
-          <option value="🐱">Cat</option>
-        </select>
-        <select id="genderInput" onchange="updateGender()">
-          <option value="Not Set">Select Gender</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-        </select>
+          <input type="text" id="nameInput" placeholder="Enter Pet Name..." oninput="updateName()">
+  
+          <select id="speciesInput" onchange="updateAvatar()">
+            <option value="🐾">Select Species</option>
+            <option value="🐶">Dog</option>
+            <option value="🐱">Cat</option>
+          </select>
+
+          <select id="genderInput" onchange="updateGenderLabel()">
+            <option value="Not Set">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
       </div>
 
       <div class="pet-card">
@@ -95,20 +108,47 @@
       </div>
     </div>
     <script>
-      function updateSpecies(){
-        
-        const val = document.getElementById('speciesInput').value;
-        document.querySelector('.animated-pet').innerText = val;
+      function updateAvatar() {
+          const species = document.getElementById('speciesInput').value;
+          const gender = document.getElementById('genderInput').value;
+          const petDisplay = document.querySelector('.animated-pet');
+
+          let fileName = "";
+
+          if(species === "🐶" && gender === "Female"){
+            
+              fileName = "female_dog_design.png";
+          }else if(species === "🐶" && gender === "Male"){
+            
+              fileName = "male_dog_design.png";
+          }else if(species === "🐱" && gender === "Female"){
+            
+              fileName = "female_cat_design.png";
+          }else if(species === "🐱" && gender === "Male"){
+            
+              fileName = "male_cat_design.png";
+          }
+
+          if(fileName !== ""){
+            
+              petDisplay.innerHTML = `<img src="files/${fileName}" alt="Pet Avatar" style="width: 80px; height: auto;">`;
+          }else{
+            
+              petDisplay.innerHTML = species; 
+          }
       }
+
       function updateName(){
         
-        const val = document.getElementById('nameInput').value;
-        document.getElementById('displayName').innerText = val || "Lucky";
+          const val = document.getElementById('nameInput').value;
+          document.getElementById('displayName').innerText = val || "Lucky";
       }
-      function updateGender(){
+
+      function updateGenderLabel(){
         
-        const val = document.getElementById('genderInput').value;
-        document.getElementById('displayGender').innerText = `Gender: ${val}`;
+          const val = document.getElementById('genderInput').value;
+          document.getElementById('displayGender').innerText = `Gender: ${val}`;
+          updateAvatar();
       }
     </script>
   </body>
