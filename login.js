@@ -1,4 +1,22 @@
 
+// function handleSocial(platform) {
+//     console.log("Signing in with:", platform);
+//     alert("This would typically redirect to " + platform + " authentication.");
+// }
+
+// function handleLogin() {
+//     const email = document.getElementById('email').value;
+//     const password = document.getElementById('password').value;
+
+//     if (email && password) {
+//         alert("Welcome to SousPaw!");
+//     } else {
+//         alert("Please fill in all fields.");
+//     }
+// }
+
+
+
 //addded a test account so we can use temporarily
 const USERS = [
     {
@@ -10,6 +28,7 @@ const USERS = [
 
     //Add real users here later, or swap this out for an API call
 ]
+
 
 /**
  * Stores a lightweight session so other pages can check if the user is logged in.
@@ -25,22 +44,66 @@ function createSession(user) {
   sessionStorage.setItem("souspaw_session", JSON.stringify(session));
 }
 
+/** Call this on protected pages to redirect guests away. */
+function requireAuth(redirectTo = "login.html") {
+  const session = sessionStorage.getItem("souspaw_session");
+  if (!session) window.location.href = redirectTo;
+  return session ? JSON.parse(session) : null;
+}
+ 
+/** Logs the user out and clears the session. */
+function logout(redirectTo = "login.html") {
+  sessionStorage.removeItem("souspaw_session");
+  window.location.href = redirectTo;
+}
 
+
+function setError(msg) {
+  let el = document.getElementById("auth-error");
+  if (!el) return;
+  el.textContent = msg;
+  el.style.display = msg ? "block" : "none";
+}
+ 
+function setLoading(isLoading) {
+  const btn = document.querySelector(".submit-btn");
+  if (!btn) return;
+  btn.disabled = isLoading;
+  btn.textContent = isLoading ? "Signing in…" : "Sign In";
+}
+ 
+// ─── Event Handlers ───────────────────────────────────────────────────────────
+ 
 function handleSocial(platform) {
-    console.log("Signing in with:", platform);
-    alert("This would typically redirect to " + platform + " authentication.");
+  // TODO: Integrate OAuth for Google / Apple
+  alert(`Social login with ${platform} coming soon!`);
 }
-
+ 
 function handleLogin() {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-
-    if (email && password) {
-        alert("Welcome to SousPaw!");
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+ 
+  setError("");
+ 
+  if (!email || !password) {
+    setError("Please enter your email and password.");
+    return;
+  }
+ 
+  setLoading(true);
+ 
+  // Simulate async call — replace setTimeout with fetch() when you have a backend
+  setTimeout(() => {
+    const user = authenticateUser(email, password);
+ 
+    if (user) {
+      createSession(user);
+      // Redirect to your main app page after login
+      window.location.href = "dashboard.html";
     } else {
-        alert("Please fill in all fields.");
+      setError("Incorrect email or password. Please try again.");
+      setLoading(false);
     }
+  }, 600);
 }
-
-
 
