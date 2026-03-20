@@ -65,45 +65,38 @@ function setError(msg) {
   el.style.display = msg ? "block" : "none";
 }
  
-function setLoading(isLoading) {
-  const btn = document.querySelector(".submit-btn");
-  if (!btn) return;
-  btn.disabled = isLoading;
-  btn.textContent = isLoading ? "Signing in…" : "Sign In";
-}
- 
+
 // ─── Event Handlers ───────────────────────────────────────────────────────────
  
 function handleSocial(platform) {
   // TODO: Integrate OAuth for Google / Apple
   alert(`Social login with ${platform} coming soon!`);
 }
+
+function authenticateUser(email, password) {
+  return USERS.find(
+    (u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password
+  ) || null;
+}
  
 function handleLogin() {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
- 
+
   setError("");
- 
+
   if (!email || !password) {
     setError("Please enter your email and password.");
     return;
   }
- 
-  setLoading(true);
- 
-  // Simulate async call — replace setTimeout with fetch() when you have a backend
-  setTimeout(() => {
-    const user = authenticateUser(email, password);
- 
-    if (user) {
-      createSession(user);
-      // Redirect to your main app page after login
-      window.location.href = "dashboard.html";
-    } else {
-      setError("Incorrect email or password. Please try again.");
-      setLoading(false);
-    }
-  }, 600);
+
+  const user = authenticateUser(email, password);
+
+  if (user) {
+    createSession(user);
+    window.location.href = "main.html";
+  } else {
+    setError("Incorrect email or password. Please try again.");
+  }
 }
 
