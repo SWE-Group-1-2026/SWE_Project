@@ -1,15 +1,35 @@
+function isValidEmail(email) {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+}
+
+function togglePassword(inputId) {
+  const input = document.getElementById(inputId);
+  if (input.type === "password") {
+    input.type = "text";
+  } else {
+    input.type = "password";
+  }
+}
+
+function showBox(element, message) {
+  element.innerText = message;
+  element.style.display = 'block';
+}
+
 async function handleSignup() {
   const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value;
   const confirmPassword = document.getElementById('confirm-password').value;
+  
   const errorDiv = document.getElementById('auth-error');
   const successDiv = document.getElementById('auth-success');
 
   errorDiv.style.display = 'none';
   successDiv.style.display = 'none';
 
-  if (!email || !password || !confirmPassword) {
-    showBox(errorDiv, "Please fill in all fields.");
+  if (!isValidEmail(email)) {
+    showBox(errorDiv, "Please enter a valid email address (e.g., name@example.com).");
     return;
   }
 
@@ -19,29 +39,24 @@ async function handleSignup() {
   }
 
   if (password !== confirmPassword) {
-    showBox(errorDiv, "Passwords do not match.");
+    showBox(errorDiv, "Passwords do not match. Please check again.");
     return;
   }
 
   try {
-    console.log("Registering user:", email);
-
-    showBox(successDiv, "Account created successfully! Redirecting...");
+    console.log("Creating SousPaw account for:", email);
+    
+    showBox(successDiv, "Welcome to the pack! Redirecting...");
 
     setTimeout(() => {
       window.location.href = "main.html"; 
     }, 2000);
 
   } catch (err) {
-    showBox(errorDiv, "An error occurred. Please try again later.");
+    showBox(errorDiv, "Something went wrong on our end. Please try again.");
   }
 }
 
-function showBox(element, message) {
-  element.innerText = message;
-  element.style.display = 'block';
-}
-
 function handleSocial(provider) {
-  console.log(`Starting OAuth flow with ${provider}...`);
+  console.log(`Starting ${provider} authentication...`);
 }
