@@ -43,13 +43,19 @@
 
       <div class="input-group">
         <label for="password">Password</label>
-        <input id="password" type="password" placeholder="••••••••" />
+        <div class="password-wrapper">
+          <input id="password" type="password" placeholder="••••••••" />
+          <span class="toggle-password" onclick="togglePassword('password')">👁️</span>
+        </div>
         <p class="password-hint">Minimum 8 characters</p>
       </div>
 
       <div class="input-group">
         <label for="confirm-password">Confirm Password</label>
-        <input id="confirm-password" type="password" placeholder="••••••••" />
+        <div class="password-wrapper">
+          <input id="confirm-password" type="password" placeholder="••••••••" />
+          <span class="toggle-password" onclick="togglePassword('confirm-password')">👁️</span>
+        </div>
       </div>
 
       <button class="submit-btn" onclick="handleSignup()">Create Account</button>
