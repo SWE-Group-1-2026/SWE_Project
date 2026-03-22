@@ -1,4 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SousPaw – Find a Recipe</title>
+  <link rel="stylesheet" href="search.css" />
+</head>
+<body>
 
+  <nav class="navbar">
+    <a href="welcome.html" class="navbar-brand">Sous<span>Paw</span></a>
+    <ul class="navbar-links">
+      <li><a href="welcome.html">Home</a></li>
+      <li><a href="search.html" class="active">Search</a></li>
+      <li><a href="login.html" class="navbar-cta">Sign In</a></li>
+    </ul>
+  </nav>
+
+  <div class="search-container">
+    <div class="search-header">
+      <h1>What are we cooking today?</h1>
+      <p>Search by dish, ingredient, or cuisine</p>
+    </div>
+
+    <div class="search-bar-wrapper">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="recipeSearch" placeholder="Try 'Homemade Pasta' or 'Chicken Curry'..." onkeyup="filterRecipes()">
+    </div>
+
+    <div class="quick-tags">
+      <span>Filters:</span>
+      <button class="tag">Breakfast</button>
+      <button class="tag">Vegan</button>
+      <button class="tag">Quick (15 min)</button>
+      <button class="tag">Desserts</button>
+    </div>
+
+    <hr class="divider">
+
+    <div id="resultsGrid" class="results-grid">
+      <p class="placeholder-text">Type something to start your culinary adventure!</p>
+    </div>
+  </div>
+
+  <script src="search.js"></script>
+</body>
 </html>
