@@ -40,12 +40,17 @@
 
       <div class="input-group">
         <label for="password">Password</label>
-        <input id="password" type="password" placeholder="••••••••" />
+        <div class="password-wrapper">
+          <input id="password" type="password" placeholder="••••••••" />
+          <span id="togglePassword" class="toggle-text" onclick="togglePassword()">Show</span>
+        </div>
       </div>
 
       <div class="forgot-link">
         <a href="#">Forgot password?</a>
       </div>
+
+      <p id="auth-error" style="color: #d9534f; font-size: 0.85rem; margin-bottom: 15px; display: none; text-align: left;"></p>
 
       <button class="submit-btn" onclick="handleLogin()">Sign In</button>
 
