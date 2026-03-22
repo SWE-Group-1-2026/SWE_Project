@@ -3,12 +3,16 @@ function isValidEmail(email) {
   return re.test(email);
 }
 
-function togglePassword(inputId) {
-  const input = document.getElementById(inputId);
-  if (input.type === "password") {
-    input.type = "text";
+function togglePassword() {
+  const passwordInput = document.getElementById("password");
+  const toggleText = document.getElementById("togglePassword");
+
+  if (passwordInput.type === "password") {
+    passwordInput.type = "text";
+    toggleText.textContent = "Hide";
   } else {
-    input.type = "password";
+    passwordInput.type = "password";
+    toggleText.textContent = "Show";
   }
 }
 
