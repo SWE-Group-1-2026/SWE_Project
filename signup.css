@@ -112,18 +112,20 @@ body {
   padding-right: 45px; 
 }
 
-.toggle-password {
+.toggle-text {
   position: absolute;
   right: 12px;
-  cursor: pointer;
   font-size: 1.1rem;
-  user-select: none;
+  font-weight: bold;
   color: #6C584C; 
-  transition: opacity 0.2s;
+  cursor: pointer;
+  text-transform: uppercase;
+  user-select: none;
+  transition: color 0.2s;
 }
 
-.toggle-password:hover {
-  opacity: 0.7;
+.toggle-text:hover {
+  color: #ADC178; 
 }
 
 .submit-btn {
