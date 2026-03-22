@@ -1,4 +1,3 @@
-
 // function handleSocial(platform) {
 //     console.log("Signing in with:", platform);
 //     alert("This would typically redirect to " + platform + " authentication.");
@@ -15,9 +14,7 @@
 //     }
 // }
 
-
-
-//addded a test account so we can use temporarily
+//added a test account so we can use temporarily
 const USERS = [
     {
         email: "test@souspaw.com",
@@ -28,7 +25,6 @@ const USERS = [
 
     //Add real users here later, or swap this out for an API call
 ]
-
 
 /**
  * Stores a lightweight session so other pages can check if the user is logged in.
@@ -57,14 +53,25 @@ function logout(redirectTo = "login.html") {
   window.location.href = redirectTo;
 }
 
-
 function setError(msg) {
   let el = document.getElementById("auth-error");
   if (!el) return;
   el.textContent = msg;
   el.style.display = msg ? "block" : "none";
 }
- 
+
+function togglePassword() {
+  const passwordInput = document.getElementById("password");
+  const toggleText = document.getElementById("togglePassword");
+
+  if (passwordInput.type === "password") {
+    passwordInput.type = "text";
+    toggleText.textContent = "Hide";
+  } else {
+    passwordInput.type = "password";
+    toggleText.textContent = "Show";
+  }
+}
 
 // ─── Event Handlers ───────────────────────────────────────────────────────────
  
@@ -78,7 +85,7 @@ function authenticateUser(email, password) {
     (u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password
   ) || null;
 }
- 
+
 function handleLogin() {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
@@ -99,4 +106,3 @@ function handleLogin() {
     setError("Incorrect email or password. Please try again.");
   }
 }
-
