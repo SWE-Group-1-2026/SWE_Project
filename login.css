@@ -115,3 +115,29 @@ body {
 
 .switch-link { margin-top: 20px; font-size: 0.9rem; }
 .switch-link a { color: #6C584C; font-weight: bold; }
+
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  padding-right: 60px; 
+}
+
+.toggle-text {
+  position: absolute;
+  right: 12px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #6C584C; 
+  cursor: pointer;
+  text-transform: uppercase;
+  user-select: none;
+  transition: color 0.2s;
+}
+
+.toggle-text:hover {
+  color: #ADC178; 
+}
