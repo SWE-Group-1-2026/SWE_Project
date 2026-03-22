@@ -69,7 +69,7 @@ function setError(msg) {
 // ─── Event Handlers ───────────────────────────────────────────────────────────
  
 function handleSocial(platform) {
-  // TODO: Integrate OAuth for Google / Apple
+  // TODO: Integrate OAuth for Google
   alert(`Social login with ${platform} coming soon!`);
 }
 
