@@ -16,7 +16,9 @@ You can also open the project by dragging and dropping `welcome.html` into your 
 
 ## Project Structure
 - `welcome.html`: Landing page (Entry point)
-- `login.html`: Login and Sign Up
+- `login.html`: Login
+- `signup.html`: Sign Up
+- `profile.html`: Profile Page
 - `main.html`: Primary application interface
 - `search.html`: Recipe search functionality
 - `*.css`: Styles for each page
