@@ -88,7 +88,7 @@ function handleSocial(platform) {
 
 function authenticateUser(email, password) {
   const allUsers = getSavedUsers();
-  return USERS.find(
+  return allUsers.find(
     (u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password
   ) || null;
 }

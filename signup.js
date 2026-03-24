@@ -1,3 +1,42 @@
+const USERS = [
+  {
+    email: "test@souspaw.com",
+    password: "testpassword",
+    name: "Dev Tester",
+    role: "dev",
+  }
+];
+
+function getSavedUsers() {
+  const stored = localStorage.getItem("souspaw_users");
+  const localUsers = stored ? JSON.parse(stored) : [];
+  return [...USERS, ...localUsers];
+}
+
+function registerUser(email, password) {
+  const users = getSavedUsers();
+
+  const exists = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+  if (exists) return { error: "An account with that email already exists." };
+
+  const newUser = {
+    email,
+    password,
+    name: email.split("@")[0],
+    role: "user",
+    createdAt: new Date().toISOString(),
+  };
+
+  const stored = localStorage.getItem("souspaw_users");
+  const localUsers = stored ? JSON.parse(stored) : [];
+  localUsers.push(newUser);
+  localStorage.setItem("souspaw_users", JSON.stringify(localUsers));
+
+  return { user: newUser };
+}
+
+
+
 function isValidEmail(email) {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return re.test(email);
@@ -14,6 +53,11 @@ function togglePassword(inputId, toggleId) {
     passwordInput.type = "password";
     toggleText.textContent = "Show";
   }
+}
+
+function showBox(element, message) {
+  element.innerText = message;
+  element.style.display = 'block';
 }
 
 async function handleSignup() {
@@ -42,13 +86,17 @@ async function handleSignup() {
     return;
   }
 
-  try {
-    console.log("Creating SousPaw account for:", email);
-    
-    showBox(successDiv, "Welcome to the pack! Redirecting...");
+    try {
+    const result = registerUser(email, password);
 
+    if (result.error) {
+      showBox(errorDiv, result.error);
+      return;
+    }
+
+    showBox(successDiv, "Welcome to the pack! Redirecting...");
     setTimeout(() => {
-      window.location.href = "main.html"; 
+      window.location.href = "main.html";
     }, 2000);
 
   } catch (err) {
