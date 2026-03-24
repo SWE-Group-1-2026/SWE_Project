@@ -133,7 +133,6 @@ body {
   font-weight: bold;
   color: #6C584C; 
   cursor: pointer;
-  text-transform: uppercase;
   user-select: none;
   transition: color 0.2s;
 }
