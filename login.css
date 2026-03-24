@@ -68,7 +68,7 @@ body {
   height: 1px;
   background: #eee;
 }
-.divider span { padding: 0 10px; font-size: 0.8rem; text-transform: uppercase; }
+.divider span { padding: 0 10px; font-size: 0.8rem; }
 
 .input-group {
   text-align: left;

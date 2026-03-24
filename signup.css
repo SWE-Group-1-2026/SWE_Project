@@ -68,7 +68,7 @@ body {
   height: 1px;
   background: #eee;
 }
-.divider span { padding: 0 10px; font-size: 0.8rem; text-transform: uppercase; }
+.divider span { padding: 0 10px; font-size: 0.8rem; }
 
 .input-group {
   text-align: left;
@@ -115,11 +115,10 @@ body {
 .toggle-text {
   position: absolute;
   right: 12px;
-  font-size: 1.1rem;
+  font-size: 0.8rem;
   font-weight: bold;
   color: #6C584C; 
   cursor: pointer;
-  text-transform: uppercase;
   user-select: none;
   transition: color 0.2s;
 }
