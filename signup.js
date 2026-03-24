@@ -3,9 +3,9 @@ function isValidEmail(email) {
   return re.test(email);
 }
 
-function togglePassword() {
-  const passwordInput = document.getElementById("password");
-  const toggleText = document.getElementById("togglePassword");
+function togglePassword(inputId, toggleId) {
+  const passwordInput = document.getElementById(inputId);
+  const toggleText = document.getElementById(toggleId);
 
   if (passwordInput.type === "password") {
     passwordInput.type = "text";
@@ -14,11 +14,6 @@ function togglePassword() {
     passwordInput.type = "password";
     toggleText.textContent = "Show";
   }
-}
-
-function showBox(element, message) {
-  element.innerText = message;
-  element.style.display = 'block';
 }
 
 async function handleSignup() {

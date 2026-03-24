@@ -45,7 +45,9 @@
         <label for="password">Password</label>
         <div class="password-wrapper">
           <input id="password" type="password" placeholder="••••••••" />
-          <span id="togglePassword" class="toggle-text" onclick="togglePassword('password')">Show</span>
+          <!-- Password -->
+            <span id="togglePassword" class="toggle-text" onclick="togglePassword('password', 'togglePassword')">Show</span>
+
         </div>
         <p class="password-hint">Minimum 8 characters</p>
       </div>
@@ -54,7 +56,8 @@
         <label for="confirm-password">Confirm Password</label>
         <div class="password-wrapper">
           <input id="confirm-password" type="password" placeholder="••••••••" />
-          <span id="togglePassword" class="toggle-text" onclick="togglePassword('confirm-password')">Show</span>
+          <!-- Confirm Password -->
+          <span id="toggleConfirm" class="toggle-text" onclick="togglePassword('confirm-password', 'toggleConfirm')">Show</span>
         </div>
       </div>
 
