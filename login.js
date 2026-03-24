@@ -87,9 +87,36 @@ function handleSocial(platform) {
 }
 
 function authenticateUser(email, password) {
+  const allUsers = getSavedUsers();
   return USERS.find(
     (u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password
   ) || null;
+}
+
+function registerUser(name, email, password) {
+  const users = getSavedUsers();
+
+   const exists = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+  if (exists) {
+    setError("An account with that email already exists.");
+    return false;
+  }
+
+  const newUser = {
+    name,
+    email,
+    password,
+    role: "user",
+    createdAt: new Date().toISOString(),
+  };
+
+  // Only save the locally-registered users (not the hardcoded USERS array)
+  const stored = localStorage.getItem("souspaw_users");
+  const localUsers = stored ? JSON.parse(stored) : [];
+  localUsers.push(newUser);
+  localStorage.setItem("souspaw_users", JSON.stringify(localUsers));
+
+  return newUser;
 }
 
 function handleLogin() {
