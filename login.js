@@ -26,6 +26,12 @@ const USERS = [
     //Add real users here later, or swap this out for an API call
 ]
 
+function getSavedUsers(){
+  const stored = localStorage.getItem("souspaw_users");
+  const localUsers = stored ? JSON.parse(stored) : [];
+  return [...USERS, ...localUsers];
+}
+
 /**
  * Stores a lightweight session so other pages can check if the user is logged in.
  * Replace sessionStorage with a real token/cookie flow in production.
