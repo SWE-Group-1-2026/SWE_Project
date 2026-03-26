@@ -130,24 +130,3 @@ function registerUser(name, email, password) {
 
   return newUser;
 }
-
-function handleLogin() {
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
-
-  setError("");
-
-  if (!email || !password) {
-    setError("Please enter your email and password.");
-    return;
-  }
-
-  const user = authenticateUser(email, password);
-
-  if (user) {
-    createSession(user);
-    window.location.href = "main.html";
-  } else {
-    setError("Incorrect email or password. Please try again.");
-  }
-}
