@@ -96,6 +96,29 @@
           console.error("Auth Error:", error);
         });
     };
+    window.handleLogin = async () => {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const errorDisplay = document.getElementById('auth-error');
+
+      errorDisplay.style.display = 'none';
+
+      if (!email || !password) {
+        errorDisplay.innerText = "Please enter your email and password.";
+        errorDisplay.style.display = "block";
+        return;
+      }
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        window.location.href = "main.html";
+      } catch (err) {
+        let message = "Incorrect email or password. Please try again.";
+        errorDisplay.innerText = message;
+        errorDisplay.style.display = "block";
+        console.error(err);
+      }
+    };
 </script>
 </body>
 </html>
