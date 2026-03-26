@@ -66,9 +66,9 @@ function setError(msg) {
   el.style.display = msg ? "block" : "none";
 }
 
-function togglePassword() {
-  const passwordInput = document.getElementById("password");
-  const toggleText = document.getElementById("togglePassword");
+function togglePassword(inputId = "password", toggleId = "togglePassword") {
+  const passwordInput = document.getElementById(inputId);
+  const toggleText = document.getElementById(toggleId);
 
   if (passwordInput.type === "password") {
     passwordInput.type = "text";
