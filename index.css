@@ -56,6 +56,18 @@ a {
 .navbar-cta:hover {
   background-color: #8A9E56;
 }
+
+.navbar-reciepes {
+  background-color: #a8b28f;
+  color: white !important;
+  padding: 8px 16px;
+  border-radius: 6px;
+}
+
+.navbar-recipes:hover {
+  background-color: #7b875b;
+}
+
 body {
   font-family: Arial, sans-serif;
   background-color: #F0EAD2;
