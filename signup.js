@@ -1,48 +1,40 @@
-const USERS = [
-  {
-    email: "test@souspaw.com",
-    password: "testpassword",
-    name: "Dev Tester",
-    role: "dev",
-  }
-];
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { 
+  getAuth, 
+  createUserWithEmailAndPassword, 
+  GoogleAuthProvider, 
+  signInWithPopup 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-function getSavedUsers() {
-  const stored = localStorage.getItem("souspaw_users");
-  const localUsers = stored ? JSON.parse(stored) : [];
-  return [...USERS, ...localUsers];
+// --- Firebase Configuration ---
+const firebaseConfig = {
+  apiKey: "AIzaSyDWMOhkUJFkzd3DG0WFN-o9fsC-L7sILcU",
+  authDomain: "souspaws-9db65.firebaseapp.com",
+  projectId: "souspaws-9db65",
+  storageBucket: "souspaws-9db65.firebasestorage.app",
+  messagingSenderId: "438669824701",
+  appId: "1:438669824701:web:886f8d9f42a0caaf875dd4"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
+
+// --- UI Helpers ---
+function showBox(element, message) {
+  element.innerText = message;
+  element.style.display = 'block';
 }
-
-function registerUser(email, password) {
-  const users = getSavedUsers();
-
-  const exists = users.find(u => u.email.toLowerCase() === email.toLowerCase());
-  if (exists) return { error: "An account with that email already exists." };
-
-  const newUser = {
-    email,
-    password,
-    name: email.split("@")[0],
-    role: "user",
-    createdAt: new Date().toISOString(),
-  };
-
-  const stored = localStorage.getItem("souspaw_users");
-  const localUsers = stored ? JSON.parse(stored) : [];
-  localUsers.push(newUser);
-  localStorage.setItem("souspaw_users", JSON.stringify(localUsers));
-
-  return { user: newUser };
-}
-
-
 
 function isValidEmail(email) {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return re.test(email);
 }
 
-function togglePassword(inputId, toggleId) {
+// --- Exporting Functions to Global Scope (so HTML can see them) ---
+
+window.togglePassword = function(inputId, toggleId) {
   const passwordInput = document.getElementById(inputId);
   const toggleText = document.getElementById(toggleId);
 
@@ -53,14 +45,9 @@ function togglePassword(inputId, toggleId) {
     passwordInput.type = "password";
     toggleText.textContent = "Show";
   }
-}
+};
 
-function showBox(element, message) {
-  element.innerText = message;
-  element.style.display = 'block';
-}
-
-async function handleSignup() {
+window.handleSignup = async function() {
   const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value;
   const confirmPassword = document.getElementById('confirm-password').value;
@@ -71,39 +58,44 @@ async function handleSignup() {
   errorDiv.style.display = 'none';
   successDiv.style.display = 'none';
 
+  // Validations
   if (!isValidEmail(email)) {
-    showBox(errorDiv, "Please enter a valid email address (e.g., name@example.com).");
+    showBox(errorDiv, "Please enter a valid email address.");
     return;
   }
-
   if (password.length < 8) {
     showBox(errorDiv, "Password must be at least 8 characters long.");
     return;
   }
-
   if (password !== confirmPassword) {
-    showBox(errorDiv, "Passwords do not match. Please check again.");
+    showBox(errorDiv, "Passwords do not match.");
     return;
   }
 
-    try {
-    const result = registerUser(email, password);
-
-    if (result.error) {
-      showBox(errorDiv, result.error);
-      return;
-    }
-
+  try {
+    // Firebase Signup
+    await createUserWithEmailAndPassword(auth, email, password);
+    
     showBox(successDiv, "Welcome to the pack! Redirecting...");
     setTimeout(() => {
       window.location.href = "main.html";
     }, 2000);
-
   } catch (err) {
-    showBox(errorDiv, "Something went wrong on our end. Please try again.");
+    // Map Firebase errors to readable messages
+    let message = "An error occurred during signup.";
+    if (err.code === 'auth/email-already-in-use') message = "That email is already registered.";
+    showBox(errorDiv, message);
+    console.error(err);
   }
-}
+};
 
-function handleSocial(provider) {
-  console.log(`Starting ${provider} authentication...`);
-}
+window.handleSocial = async function(provider) {
+  if (provider === 'Google') {
+    try {
+      await signInWithPopup(auth, googleProvider);
+      window.location.href = "main.html";
+    } catch (err) {
+      console.error("Social login failed:", err);
+    }
+  }
+};
