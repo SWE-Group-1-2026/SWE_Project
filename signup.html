@@ -71,7 +71,50 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
+    
+    function showBox(element, message) {
+      element.innerText = message;
+      element.style.display = 'block';
+    }
 
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    window.handleSignUp = async function() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+      const errorDiv = document.getElementById('auth-error');
+      const successDiv = document.getElementById('auth-success');
+
+      errorDiv.style.display = 'none';
+      successDiv.style.display = 'none';
+
+      if (!isValidEmail(email)) {
+        showBox(errorDiv, "Please enter a valid email address.");
+        return;
+      }
+      if (password.length < 8) {
+        showBox(errorDiv, "Password must be at least 8 characters long.");
+        return;
+      }
+      if (password !== confirmPassword) {
+        showBox(errorDiv, "Passwords do not match.");
+        return;
+      }
+
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        showBox(successDiv, "Welcome! Redirecting...");
+        setTimeout(() => { window.location.href = "main.html"; }, 2000);
+      } catch (err) {
+        let message = "An error occurred during signup.";
+        if (err.code === 'auth/email-already-in-use') message = "That email is already registered.";
+        showBox(errorDiv, message);
+        console.error(err);
+      }
+    };
     window.continueWithGoogle = () => {
       const errorDiv = document.getElementById('auth-error');
       signInWithPopup(auth, provider)
