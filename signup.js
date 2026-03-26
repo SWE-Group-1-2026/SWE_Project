@@ -6,7 +6,6 @@ import {
   signInWithPopup 
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-// --- Firebase Configuration ---
 const firebaseConfig = {
   apiKey: "AIzaSyDWMOhkUJFkzd3DG0WFN-o9fsC-L7sILcU",
   authDomain: "souspaws-9db65.firebaseapp.com",
@@ -16,12 +15,10 @@ const firebaseConfig = {
   appId: "1:438669824701:web:886f8d9f42a0caaf875dd4"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
-// --- UI Helpers ---
 function showBox(element, message) {
   element.innerText = message;
   element.style.display = 'block';
@@ -31,8 +28,6 @@ function isValidEmail(email) {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return re.test(email);
 }
-
-// --- Exporting Functions to Global Scope (so HTML can see them) ---
 
 window.togglePassword = function(inputId, toggleId) {
   const passwordInput = document.getElementById(inputId);
@@ -58,7 +53,6 @@ window.handleSignup = async function() {
   errorDiv.style.display = 'none';
   successDiv.style.display = 'none';
 
-  // Validations
   if (!isValidEmail(email)) {
     showBox(errorDiv, "Please enter a valid email address.");
     return;
@@ -73,7 +67,6 @@ window.handleSignup = async function() {
   }
 
   try {
-    // Firebase Signup
     await createUserWithEmailAndPassword(auth, email, password);
     
     showBox(successDiv, "Welcome to the pack! Redirecting...");
@@ -81,7 +74,6 @@ window.handleSignup = async function() {
       window.location.href = "main.html";
     }, 2000);
   } catch (err) {
-    // Map Firebase errors to readable messages
     let message = "An error occurred during signup.";
     if (err.code === 'auth/email-already-in-use') message = "That email is already registered.";
     showBox(errorDiv, message);
