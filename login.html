@@ -81,20 +81,15 @@
 
     window.continueWithGoogle = () => {
       const errorDisplay = document.getElementById('auth-error');
-    
-      signInWithPopup(auth, provider).then((result) => {
-          const user = result.user;
-          console.log("Logged in as:", user.displayName);
-        
-          window.location.href = "main.html"; 
-        })
+      signInWithPopup(auth, provider)
+        .then(() => { window.location.href = "main.html"; })
         .catch((error) => {
           if (errorDisplay) {
-            errorDisplay.innerText = "Google Login failed: " + error.message;
+            errorDisplay.innerText = "Google login failed: " + error.message;
             errorDisplay.style.display = "block";
           }
           console.error("Auth Error:", error);
-        });
+      });
     };
     window.handleLogin = async () => {
       const email = document.getElementById("email").value.trim();
