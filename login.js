@@ -151,28 +151,3 @@ function handleLogin() {
     setError("Incorrect email or password. Please try again.");
   }
 }
-
-function handleSignUp() {
-  const name     = document.getElementById("name").value.trim();
-  const email    = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
-  const confirm  = document.getElementById("confirm-password").value;
-
-  setError("");
-
-  if (!name || !email || !password) {
-    setError("Please fill in all fields.");
-    return;
-  }
-
-  if (password !== confirm) {
-    setError("Passwords do not match.");
-    return;
-  }
-
-  const newUser = registerUser(name, email, password);
-  if (newUser) {
-    createSession(newUser);
-    window.location.href = "main.html";
-  }
-}
