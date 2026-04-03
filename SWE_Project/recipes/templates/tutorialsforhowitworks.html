@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SousPaw - How It Works</title>
+  <link rel="stylesheet" href="{% static 'recipes/tutorial.css' %}">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="{% url 'home' %}" class="navbar-brand">Sous<span>Paw</span></a>
+    <ul class="navbar-links">
+      <li><a href="{% url 'search' %}">Recipes</a></li>
+      <li><a href="{% url 'login' %}">Sign In</a></li>
+    </ul>
+  </nav>
+
+  <main class="tutorial-shell">
+    <section class="hero">
+      <p class="eyebrow">How It Works</p>
+      <h1>From sign-up to dinner, SousPaw guides the full cooking flow.</h1>
+      <p class="lead">
+        The project is now organized as a Django site, so each step below maps to a real route in the app.
+      </p>
+    </section>
+
+    <section class="steps">
+      <article class="step-card">
+        <span class="step-number">1</span>
+        <h2>Create your account</h2>
+        <p>Users can sign up or sign in through the Django-served authentication pages.</p>
+      </article>
+      <article class="step-card">
+        <span class="step-number">2</span>
+        <h2>Customize your companion</h2>
+        <p>Choose your pet species, set a name, and build a cooking buddy with live previews.</p>
+      </article>
+      <article class="step-card">
+        <span class="step-number">3</span>
+        <h2>Search for recipes</h2>
+        <p>Browse the recipe collection and jump into the detail page for ingredients and steps.</p>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

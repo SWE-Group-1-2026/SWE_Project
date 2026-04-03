@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SousPaw - Pet Companion</title>
+  <link rel="stylesheet" href="{% static 'recipes/main.css' %}">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="{% url 'home' %}" class="navbar-brand">Sous<span>Paw</span></a>
+    <ul class="navbar-links">
+      <li><a href="{% url 'search' %}">Recipes</a></li>
+      <li><a href="{% url 'tutorial' %}">How it works</a></li>
+      <li><a href="{% url 'profile' %}">Profile</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <div class="customizer">
+      <h1>Customize Your Pet</h1>
+      <p>Build the kitchen buddy that will cheer you on through every recipe.</p>
+
+      <label for="nameInput">Pet name</label>
+      <input type="text" id="nameInput" placeholder="Enter pet name..." oninput="updateName()">
+
+      <label for="speciesInput">Species</label>
+      <select id="speciesInput" onchange="updateAvatar()">
+        <option value="">Select species</option>
+        <option value="dog">Dog</option>
+        <option value="cat">Cat</option>
+      </select>
+
+      <label for="genderInput">Gender</label>
+      <select id="genderInput" onchange="updateGenderLabel()">
+        <option value="Not Set">Select gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+
+      <div class="button-row">
+        <a href="{% url 'search' %}" class="primary-btn">Browse Recipes</a>
+      </div>
+    </div>
+
+    <div class="pet-card">
+      <div class="animation-container">
+        <div class="animated-pet">🐾</div>
+        <div class="shadow"></div>
+      </div>
+
+      <div class="pet-info">
+        <h2 id="displayName">Lucky</h2>
+        <p id="displayGender">Gender: Not Set</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'recipes/pet_customizer.js' %}"></script>
+</body>
+</html>

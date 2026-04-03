@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if recipe %}{{ recipe.recipe_name }}{% else %}Recipe{% endif %}</title>
+    <link rel="stylesheet" href="{% static 'recipes/recipe.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="{% url 'home' %}" class="navbar-brand">Sous<span>Paw</span></a>
+        <ul class="navbar-links">
+            <li><a href="{% url 'search' %}">Recipes</a></li>
+            <li><a href="{% url 'pet_customizer' %}">Pet</a></li>
+        </ul>
+    </nav>
+
+    <main class="recipe-shell">
+        {% if error %}
+            <section class="recipe-card error-card">
+                <h1>Recipe unavailable</h1>
+                <p>{{ error }}</p>
+                <a href="{% url 'search' %}" class="back-link">Back to Search</a>
+            </section>
+        {% else %}
+            <section class="recipe-card">
+                <p class="eyebrow">{{ recipe.cuisine }}</p>
+                <h1>{{ recipe.recipe_name }}</h1>
+                <p class="duration">⏱️ {{ recipe.duration }} min</p>
+
+                <div class="recipe-columns">
+                    <div>
+                        <h2>Ingredients</h2>
+                        <ul>
+                            {% for ingredient in recipe.ingredients %}
+                                <li>{{ ingredient }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h2>Steps</h2>
+                        <ol>
+                            {% for step in recipe.recipe_steps %}
+                                <li>{{ step }}</li>
+                            {% endfor %}
+                        </ol>
+                    </div>
+                </div>
+
+                <a href="{% url 'search' %}" class="back-link">Back to Search</a>
+            </section>
+        {% endif %}
+    </main>
+</body>
+</html>

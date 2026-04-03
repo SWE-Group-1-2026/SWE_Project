@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SousPaw - Welcome</title>
+  <link rel="stylesheet" href="{% static 'recipes/index.css' %}">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="{% url 'home' %}" class="navbar-brand">Sous<span>Paw</span></a>
+    <ul class="navbar-links">
+      <li><a href="{% url 'search' %}" class="navbar-recipes">Recipes</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="{% url 'tutorial' %}" class="navbar-cta">How it works</a></li>
+      <li><a href="{% url 'signup' %}" class="navbar-cta">Sign Up</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero-header">
+    <h1>Welcome to SousPaw, your interactive cooking companion!</h1>
+    <h2>Cooking made fun, guided, and stress-free.</h2>
+    <p>
+      SousPaw walks you through recipes step by step with a virtual pet companion,
+      smart reminders, and dishes from every corner of the world.
+    </p>
+    <a href="{% url 'signup' %}" class="cta-btn">Get Started -&gt;</a>
+  </div>
+
+  <section class="section" id="features">
+    <div class="features-header">
+      <p class="section-label">Why SousPaw?</p>
+      <h2 class="section-title">Built to make cooking easier</h2>
+      <p class="section-subtitle">
+        Whether you're a beginner or a seasoned home cook, SousPaw has you covered at every step.
+      </p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card fade-up fade-up-1">
+        <div class="feature-icon-wrap feature-icon-orange">📋</div>
+        <h3 class="feature-title">Step-by-Step Guidance</h3>
+        <p class="feature-desc">
+          Follow along at your own pace. Each recipe is broken into clear, manageable steps.
+        </p>
+      </div>
+
+      <div class="feature-card fade-up fade-up-2">
+        <div class="feature-icon-wrap feature-icon-gold">🌍</div>
+        <h3 class="feature-title">Multi-Cultural Recipes</h3>
+        <p class="feature-desc">
+          Explore dishes from Japan, Mexico, Italy, India, and beyond.
+        </p>
+      </div>
+
+      <div class="feature-card fade-up fade-up-3">
+        <div class="feature-icon-wrap feature-icon-brown">🐾</div>
+        <h3 class="feature-title">Virtual Pet Companion</h3>
+        <p class="feature-desc">
+          Your companion cheers you on, sets timers, and nudges you when something needs attention.
+        </p>
+      </div>
+
+      <div class="feature-card fade-up fade-up-4">
+        <div class="feature-icon-wrap feature-icon-sage">⏱️</div>
+        <h3 class="feature-title">Smart Reminders</h3>
+        <p class="feature-desc">
+          Keep track of cooking times and get alerts right when you need them.
+        </p>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
