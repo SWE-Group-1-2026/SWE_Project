@@ -37,9 +37,7 @@
       <button type="submit" class="search-btn">Search</button>
     </form>
 
-    {% if error_message %}
-      <p class="placeholder-text">{{ error_message }}</p>
-    {% endif %}
+    <p id="searchStatus" class="search-status"{% if not error_message %} hidden{% endif %}>{{ error_message }}</p>
 
     <hr class="divider">
 
@@ -60,5 +58,7 @@
       {% endif %}
     </div>
   </div>
+
+  <script src="{% static 'recipes/live_search.js' %}"></script>
 </body>
 </html>

@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 
 
@@ -96,6 +97,15 @@ def search_recipes(request):
                 "Recipe search is temporarily unavailable because the MongoDB service could not be reached."
             )
             results = []
+
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        return JsonResponse(
+            {
+                "recipes": results,
+                "query": query,
+                "error_message": error_message,
+            }
+        )
 
     return render(
         request,
