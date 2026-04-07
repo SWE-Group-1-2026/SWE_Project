@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SousPaw – Customize Your Pet</title>
+    <link rel="stylesheet" href="index.css" />
     <style>
         @keyframes bounce{
-          
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-15px); }
         }
         .animated-pet{  
-          
             width: 250px;
             height: 250px; 
             display: flex;
@@ -19,96 +21,105 @@
             animation: bounce 1.5s infinite ease-in-out; 
         }
         .animated-pet img{
-          
             width: 100%;   
             height: 100%;  
             object-fit: contain; 
             transform: scale(1.2);
         }
         .shadow{
-          
             width: 140px;   
             height: 12px;
-            background: rgba(0, 0, 0, 1.0);
+            background: rgba(74, 58, 46, 0.3); 
             border-radius: 50%;
             margin: 25px auto;
             animation: shadow-shrink 1.5s infinite ease-in-out;
         }
+
         @keyframes shadow-shrink{
-          
-            0%, 100%{ 
-              
-              transform: scale(1); 
-              opacity: 0.2; 
-            }
-            50%{ 
-              
-              transform: scale(0.6); 
-              opacity: 0.1; 
-            }
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(0.6); opacity: 0.1; }
         }
+
         .container{ 
-          
             display: flex; 
-            gap: 20px; 
-            padding: 20px; 
-            font-family: sans-serif; 
-            align-items: center;
+            gap: 40px; 
+            padding: 60px 20px; 
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap; 
         }
         .customizer{
-          
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 15px;
+            background: #DDE5B6; 
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            min-width: 280px;
+        }
+        .customizer h3{
+            margin-top: 0;
+            color: #4A3A2E;
         }
         .pet-card{  
-          
-            border: 2px solid #ddd;  
-            padding: 30px; 
-            border-radius: 15px;  
+            background-color: #FFFFFF;
+            padding: 40px; 
+            border-radius: 12px;  
             text-align: center; 
-            min-width: 300px; 
+            min-width: 320px; 
             min-height: 450px; 
             display: flex;
             flex-direction: column;
             justify-content: center;
-            background-color: #f9f9f9;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
         .customizer input, .customizer select{
-          
-            padding: 10px;
-            border: 1px solid #ccc;
+            padding: 12px;
+            border: 1px solid #ADC178;
             border-radius: 8px;
             font-size: 14px;
-            background-color: white;
+            outline-color: #6C584C;
+        }
+        .pet-info h2{
+            margin: 10px 0 5px;
+            color: #6C584C;
+        }
+        .pet-info p{
+            color: #ADC178;
+            font-weight: bold;
+            margin: 0;
         }
     </style>
   </head>
   <body>
+    <nav class="navbar">
+      <a href="index.html" class="navbar-brand">Sous<span>Paw</span></a>
+      <ul class="navbar-links">
+        <li><a href="search.html" class="navbar-recipes">Recipes</a></li>
+        <li><a href="index.html" class="navbar-cta">Home</a></li>
+      </ul>
+    </nav>
     <div class="container">
       <div class="customizer">
         <h3>Customize Your Pet</h3>
-          <input type="text" id="nameInput" placeholder="Enter Pet Name..." oninput="updateName()">
-  
-          <select id="speciesInput" onchange="updateAvatar()">
-            <option value="🐾">Select Species</option>
-            <option value="🐶">Dog</option>
-            <option value="🐱">Cat</option>
-          </select>
-
-          <select id="genderInput" onchange="updateGenderLabel()">
-            <option value="Not Set">Select Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
+        <input type="text" id="nameInput" placeholder="Enter Pet Name..." oninput="updateName()">
+        <select id="speciesInput" onchange="updateAvatar()">
+          <option value="🐾">Select Species</option>
+          <option value="🐶">Dog</option>
+          <option value="🐱">Cat</option>
+        </select>
+        <select id="genderInput" onchange="updateGenderLabel()">
+          <option value="Not Set">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
       </div>
-
       <div class="pet-card">
         <div class="animation-container">
           <div class="animated-pet">🐾</div> 
           <div class="shadow"></div>
         </div>
-    
         <div class="pet-info">
           <h2 id="displayName">Lucky</h2>
           <p id="displayGender">Gender: Not Set</p>
@@ -120,40 +131,28 @@
           const species = document.getElementById('speciesInput').value;
           const gender = document.getElementById('genderInput').value;
           const petDisplay = document.querySelector('.animated-pet');
-
           let fileName = "";
-
+        
           if(species === "🐶" && gender === "Female"){
-            
               fileName = "female_dog_design.png";
-          }else if(species === "🐶" && gender === "Male"){
-            
+          } else if(species === "🐶" && gender === "Male"){
               fileName = "male_dog_design.png";
-          }else if(species === "🐱" && gender === "Female"){
-            
+          } else if(species === "🐱" && gender === "Female"){
               fileName = "female_cat_design.png";
-          }else if(species === "🐱" && gender === "Male"){
-            
+          } else if(species === "🐱" && gender === "Male"){
               fileName = "male_cat_design.png";
           }
-
           if(fileName !== ""){
-            
               petDisplay.innerHTML = `<img src="assets/${fileName}" alt="Pet Avatar">`;
           }else{
-            
               petDisplay.innerHTML = species; 
           }
       }
-
       function updateName(){
-        
           const val = document.getElementById('nameInput').value;
           document.getElementById('displayName').innerText = val || "Lucky";
       }
-
       function updateGenderLabel(){
-        
           const val = document.getElementById('genderInput').value;
           document.getElementById('displayGender').innerText = `Gender: ${val}`;
           updateAvatar();
