@@ -3,13 +3,73 @@ SousPaw is an interactive cooking website designed to make cooking more engaging
 
 ## How to Run the Project
 
-This project is now organized as a Django application.
+This project is a Django application. After cloning the repository onto your own computer, run it with the steps below.
 
-1. Open a terminal in `/Users/eesha/Downloads/Archive/Desktop/UF/CEN3031/SWE_Project/SWE_Project`
-2. Activate your virtual environment if needed
-3. Run `python manage.py migrate`
-4. Run `python manage.py runserver`
-5. Open `http://127.0.0.1:8000/`
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/SWE-Group-1-2026/SWE_Project.git
+cd SWE_Project
+```
+
+### 2. Create and activate a virtual environment
+
+On macOS or Linux:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+On Windows PowerShell:
+
+```powershell
+py -m venv venv
+venv\Scripts\Activate.ps1
+```
+
+### 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Set up MongoDB
+
+The recipes page uses MongoDB Atlas. Update the MongoDB connection string in `SWE_Project/recipes/views.py` or, preferably, configure it from an environment variable before running the server.
+
+Make sure:
+
+- your MongoDB Atlas cluster is running
+- your IP address is allowed in Atlas Network Access
+- the database user credentials are valid
+- the `SousPaw` database and `Recipes` collection exist
+
+### 5. Run Django migrations
+
+```bash
+python SWE_Project/manage.py migrate
+```
+
+### 6. Start the development server
+
+```bash
+python SWE_Project/manage.py runserver
+```
+
+### 7. Open the app
+
+Visit:
+
+```text
+http://127.0.0.1:8000/
+```
+
+## Notes
+
+- Do not commit your local `venv/` folder.
+- If `python` does not work on your machine, use `python3`.
+- If the recipes page does not load, the most common issue is MongoDB Atlas access or connection settings.
 
 ## Project Structure
 - `SWE_Project/manage.py`: Django entry point
@@ -17,4 +77,3 @@ This project is now organized as a Django application.
 - `SWE_Project/recipes/`: Main app with views, routes, templates, and static assets
 - `SWE_Project/recipes/templates/`: Django templates for landing, auth, pet, profile, tutorial, search, and recipe pages
 - `SWE_Project/recipes/static/recipes/`: CSS, JavaScript, and image assets served by Django
-
