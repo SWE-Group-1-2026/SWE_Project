@@ -3,7 +3,7 @@ SousPaw is an interactive cooking website designed to make cooking more engaging
 
 ## How to Run the Project
 
-This project is a Django application. After cloning the repository onto your own computer, run it with the steps below.
+This project is a Django application. After cloning the repository onto your own computer, run it with the steps below. Also, make sure to install python3 in your terminal. If you type in python3 -m venv venv in your terminal it should automatically provide you with the next steps to do so if it is not already installed in your terminal.
 
 ### 1. Clone the repository
 
