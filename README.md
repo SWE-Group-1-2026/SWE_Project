@@ -21,18 +21,21 @@ python3 -m venv venv
 source venv/bin/activate
 ```
 
-On Windows PowerShell:
+On Windows:
 
 ```powershell
 py -m venv venv
 venv\Scripts\Activate.ps1
 ```
+If receiving an error with the venv\Scripts\Activate.ps1 command do: Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass and then try the command again.
 
 ### 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
+For Windows: 
+py -m pip install -r requirements.txt
 
 ### 4. Set up MongoDB
 
@@ -51,15 +54,16 @@ Make sure:
 python SWE_Project/manage.py migrate
 ```
 
-### 6. Start the development server
+### 6. Start the development server virtual environment
 
 ```bash
 python SWE_Project/manage.py runserver
 ```
+Or py SWE_Project/manage.py runserver
 
 ### 7. Open the app
 
-Visit:
+Visit in your local browser:
 
 ```text
 http://127.0.0.1:8000/
