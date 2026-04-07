@@ -116,6 +116,25 @@ body {
 .switch-link { margin-top: 20px; font-size: 0.9rem; }
 .switch-link a { color: #6C584C; font-weight: bold; }
 
+.auth-message {
+  display: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.auth-error {
+  background: #fff0f0;
+  color: #c0392b;
+  border: 1px solid #f5c6c6;
+}
+
+.auth-message.visible {
+  display: block;
+}
+
 .password-wrapper {
   position: relative;
   display: flex;

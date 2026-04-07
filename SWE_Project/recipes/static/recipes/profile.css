@@ -37,6 +37,19 @@ body {
   text-decoration: none;
 }
 
+.nav-form {
+  margin: 0;
+}
+
+.nav-button {
+  background: transparent;
+  border: 0;
+  color: #f0ead2;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+}
+
 .profile-shell {
   min-height: calc(100vh - 68px);
   display: grid;

@@ -14,6 +14,12 @@
       <li><a href="{% url 'search' %}">Recipes</a></li>
       <li><a href="{% url 'tutorial' %}">How it works</a></li>
       <li><a href="{% url 'profile' %}">Profile</a></li>
+      <li>
+        <form method="post" action="{% url 'logout' %}" class="nav-form">
+          {% csrf_token %}
+          <button type="submit" class="nav-button">Log Out</button>
+        </form>
+      </li>
     </ul>
   </nav>
 
