@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SousPaw - Email Verification</title>
+  <link rel="stylesheet" href="{% static 'recipes/verify_email.css' %}">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="{% url 'home' %}" class="navbar-brand">Sous<span>Paw</span></a>
+    <ul class="navbar-links">
+      <li><a href="{% url 'home' %}">Home</a></li>
+    </ul>
+  </nav>
+
+  <div class="page">
+    <div class="status-card">
+      {% if verification_success %}
+        <p class="eyebrow success">Verified</p>
+        <h1>Your email is confirmed</h1>
+        <p class="subtitle">
+          Your SousPaw account is active now. You can sign in and start using the app.
+        </p>
+        <div class="action-row">
+          <a href="{{ login_url }}" class="primary-link">Sign In</a>
+        </div>
+      {% else %}
+        <p class="eyebrow error">Link expired</p>
+        <h1>We couldn't verify that email</h1>
+        <p class="subtitle">
+          That verification link is invalid or expired. Try signing up again to get a fresh email.
+        </p>
+        <div class="action-row">
+          <a href="{% url 'signup' %}" class="primary-link">Create Account Again</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>

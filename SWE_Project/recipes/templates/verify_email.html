@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SousPaw - Verify Your Email</title>
+  <link rel="stylesheet" href="{% static 'recipes/verify_email.css' %}">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="{% url 'home' %}" class="navbar-brand">Sous<span>Paw</span></a>
+    <ul class="navbar-links">
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="{% url 'login' %}">Sign In</a></li>
+    </ul>
+  </nav>
+
+  <div class="page">
+    <div class="status-card">
+      <p class="eyebrow">One more step</p>
+      <h1>Verify your email</h1>
+      <p class="subtitle">
+        We sent a verification link{% if submitted_email %} to <strong>{{ submitted_email }}</strong>{% endif %}.
+        Open that email and click the link before signing in.
+      </p>
+      <p class="helper-text">
+        Your account stays locked until you verify your email address.
+      </p>
+
+      <div class="action-row">
+        <a href="{% url 'login' %}" class="primary-link">Back to Sign In</a>
+        <a href="{% url 'signup' %}" class="secondary-link">Use a different email</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

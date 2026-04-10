@@ -15,6 +15,9 @@
         <ul class="navbar-links">
             <li><a href="{% url 'search' %}">Recipes</a></li>
             <li><a href="{% url 'pet_customizer' %}">Pet</a></li>
+            {% if request.user.is_authenticated %}
+            <li><a href="{% url 'profile' %}">Profile</a></li>
+            {% endif %}
         </ul>
     </nav>
 
@@ -28,7 +31,25 @@
         {% else %}
         <section class="recipe-card">
             <p class="eyebrow">{{ recipe.cuisine }}</p>
-            <h1>{{ recipe.recipe_name }}</h1>
+            <div class="recipe-header">
+                <h1>{{ recipe.recipe_name }}</h1>
+                <div class="recipe-actions">
+                    <form action="{% url 'recipe_steps' recipe.id %}" method="get" class="start-form">
+                        <button type="submit" class="step-button primary-button">Start Cooking</button>
+                    </form>
+                    {% if request.user.is_authenticated %}
+                    <form action="{% url 'toggle_saved_recipe' recipe.id %}" method="post" class="save-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{% url 'recipe_detail' recipe.id %}">
+                        <button type="submit" class="step-button {% if is_saved %}secondary-button{% else %}ghost-button{% endif %}">
+                            {% if is_saved %}Saved{% else %}Save Recipe{% endif %}
+                        </button>
+                    </form>
+                    {% else %}
+                    <a href="{% url 'login' %}" class="step-button ghost-button">Sign In to Save</a>
+                    {% endif %}
+                </div>
+            </div>
             <p class="duration">⏱️ {{ recipe.duration }}</p>
 
             <div class="recipe-columns">

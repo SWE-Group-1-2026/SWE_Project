@@ -24,6 +24,16 @@ body {
   border-radius: 6px;
 }
 
+.nav-form {
+  margin: 0;
+}
+
+.nav-button {
+  border: none;
+  font: inherit;
+  cursor: pointer;
+}
+
 .search-container {
   max-width: 900px;
   margin: 60px auto;

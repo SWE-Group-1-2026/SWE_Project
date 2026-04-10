@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if recipe %}{{ recipe.recipe_name }} Steps{% else %}Recipe Steps{% endif %}</title>
+    <link rel="stylesheet" href="{% static 'recipes/recipe.css' %}">
+    <script src="{% static 'recipes/recipe.js' %}" defer></script>
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="{% url 'home' %}" class="navbar-brand">Sous<span>Paw</span></a>
+        <ul class="navbar-links">
+            <li><a href="{% url 'search' %}">Recipes</a></li>
+            <li><a href="{% url 'pet_customizer' %}">Pet</a></li>
+        </ul>
+    </nav>
+
+    <main class="recipe-shell">
+        {% if error %}
+        <section class="recipe-card error-card">
+            <h1>Recipe unavailable</h1>
+            <p>{{ error }}</p>
+            <a href="{% url 'search' %}" class="back-link">Back to Search</a>
+        </section>
+        {% else %}
+        <section class="recipe-card">
+            <p class="eyebrow">{{ recipe.cuisine }}</p>
+            <h1>{{ recipe.recipe_name }}</h1>
+            <p class="duration">⏱️ {{ recipe.duration }}</p>
+
+            <section class="step-player" data-step-player>
+                <div class="step-player-panel" data-step-panel>
+                    <p class="step-progress" data-step-progress aria-live="polite"></p>
+                    <p class="step-current" data-step-current></p>
+                    <div class="step-player-actions">
+                        <button type="button" class="step-button secondary-button" data-prev-button>Previous</button>
+                        <button type="button" class="step-button primary-button" data-next-button>Next</button>
+                        <button type="button" class="step-button ghost-button" data-restart-button>Restart</button>
+                    </div>
+                </div>
+            </section>
+
+            <ol class="sr-only-step-list" aria-hidden="true">
+                {% for step in recipe.recipe_steps %}
+                <li data-recipe-step>{{ step }}</li>
+                {% endfor %}
+            </ol>
+
+            <div class="step-page-links">
+                <a href="{% url 'recipe_detail' recipe.id %}" class="back-link">Back to Recipe</a>
+                <a href="{% url 'search' %}" class="back-link">Back to Search</a>
+            </div>
+        </section>
+        {% endif %}
+    </main>
+</body>
+
+</html>

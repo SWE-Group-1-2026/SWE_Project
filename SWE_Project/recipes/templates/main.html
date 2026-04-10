@@ -27,27 +27,51 @@
     <div class="customizer">
       <h1>Customize Your Pet</h1>
       <p>Build the kitchen buddy that will cheer you on through every recipe.</p>
+      {% if success_message %}
+      <p class="status-message success">{{ success_message }}</p>
+      {% endif %}
+      {% if error_message %}
+      <p class="status-message error">{{ error_message }}</p>
+      {% endif %}
 
-      <label for="nameInput">Pet name</label>
-      <input type="text" id="nameInput" placeholder="Enter pet name..." oninput="updateName()">
+      <form method="post" class="pet-form">
+        {% csrf_token %}
+        <label for="nameInput">Pet name</label>
+        <input
+          type="text"
+          id="nameInput"
+          name="name"
+          maxlength="50"
+          placeholder="Enter pet name..."
+          value="{{ pet_profile.name }}"
+          oninput="updateName()"
+        >
 
-      <label for="speciesInput">Species</label>
-      <select id="speciesInput" onchange="updateAvatar()">
-        <option value="">Select species</option>
-        <option value="dog">Dog</option>
-        <option value="cat">Cat</option>
-      </select>
+        <label for="speciesInput">Species</label>
+        <select id="speciesInput" name="species" onchange="updateAvatar()">
+          {% for value, label in species_choices %}
+          <option value="{{ value }}" {% if pet_profile.species == value %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
 
-      <label for="genderInput">Gender</label>
-      <select id="genderInput" onchange="updateGenderLabel()">
-        <option value="Not Set">Select gender</option>
-        <option value="Male">Male</option>
-        <option value="Female">Female</option>
-      </select>
+        <label for="genderInput">Gender</label>
+        <select id="genderInput" name="gender" onchange="updateGenderLabel()">
+          {% for value, label in gender_choices %}
+          <option value="{{ value }}" {% if pet_profile.gender == value %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
 
-      <div class="button-row">
-        <a href="{% url 'search' %}" class="primary-btn">Browse Recipes</a>
-      </div>
+        <div class="button-row">
+          <button type="submit" class="primary-btn">Save Pet</button>
+          <button
+            type="button"
+            class="primary-btn"
+            onclick="window.location.href='{% url 'search' %}'"
+          >
+            Browse Recipes
+          </button>
+        </div>
+      </form>
     </div>
 
     <div class="pet-card">
@@ -57,8 +81,8 @@
       </div>
 
       <div class="pet-info">
-        <h2 id="displayName">Lucky</h2>
-        <p id="displayGender">Gender: Not Set</p>
+        <h2 id="displayName">{{ pet_profile.name }}</h2>
+        <p id="displayGender">Gender: {{ pet_profile.gender }}</p>
       </div>
     </div>
   </div>

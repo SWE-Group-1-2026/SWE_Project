@@ -32,3 +32,8 @@ function updateGenderLabel() {
   document.getElementById("displayGender").textContent = `Gender: ${val}`;
   updateAvatar();
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  updateName();
+  updateGenderLabel();
+});

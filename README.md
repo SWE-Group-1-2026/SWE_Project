@@ -25,17 +25,34 @@ On Windows:
 
 ```powershell
 py -m venv venv
-venv\Scripts\Activate.ps1
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\venv\Scripts\Activate.ps1
+```
+
+If PowerShell blocks activation, you can still run everything using the virtual environment Python directly:
+
+```powershell
+.\venv\Scripts\python.exe -m pip install -r requirements.txt
+.\venv\Scripts\python.exe SWE_Project\manage.py migrate
+.\venv\Scripts\python.exe SWE_Project\manage.py runserver
 ```
 If receiving an error with the venv\Scripts\Activate.ps1 command do: Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass and then try the command again.
 
 ### 3. Install dependencies
+
+On macOS or Linux:
 
 ```bash
 pip install -r requirements.txt
 ```
 For Windows: 
 py -m pip install -r requirements.txt
+
+On Windows PowerShell:
+
+```powershell
+py -m pip install -r requirements.txt
+```
 
 ### 4. Set up MongoDB
 
@@ -48,20 +65,57 @@ Make sure:
 - the database user credentials are valid
 - the `SousPaw` database and `Recipes` collection exist
 
-### 5. Run Django migrations
+### 5. Set up Gmail for verification emails
+
+The signup flow sends a verification email before a new user can log in. The easiest setup is Gmail SMTP with an App Password.
+
+1. Turn on 2-Step Verification for the Gmail account you want to send from.
+2. Create a Google App Password for that account.
+3. Copy `.env.example` to `.env`.
+4. Replace the placeholder values in `.env` with your Gmail address and App Password.
+
+Example `.env`:
+
+```env
+EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_HOST_USER=yourgmail@gmail.com
+EMAIL_HOST_PASSWORD=your_16_character_app_password
+DEFAULT_FROM_EMAIL=yourgmail@gmail.com
+EMAIL_USE_TLS=True
+```
+
+### 6. Run Django migrations
+
+On macOS or Linux:
 
 ```bash
 python SWE_Project/manage.py migrate
 ```
 
-### 6. Start the development server virtual environment
+On Windows PowerShell:
+
+```powershell
+py SWE_Project\manage.py migrate
+```
+
+### 7. Start the development server
+
+On macOS or Linux:
 
 ```bash
 python SWE_Project/manage.py runserver
 ```
 Or py SWE_Project/manage.py runserver
 
-### 7. Open the app
+On Windows PowerShell:
+
+```powershell
+py SWE_Project\manage.py runserver
+```
+
+### 8. Open the app
 
 Visit in your local browser:
 
@@ -73,6 +127,8 @@ http://127.0.0.1:8000/
 
 - Do not commit your local `venv/` folder.
 - If `python` does not work on your machine, use `python3`.
+- On Windows, if `pip` or `pip3` is not recognized, use `py -m pip` instead.
+- On Windows PowerShell, if `Activate.ps1` is blocked, use `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` for the current terminal session.
 - If the recipes page does not load, the most common issue is MongoDB Atlas access or connection settings.
 
 ## Project Structure

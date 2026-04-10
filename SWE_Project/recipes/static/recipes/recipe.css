@@ -61,7 +61,30 @@ body {
   letter-spacing: 0.1em;
 }
 
+.recipe-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+}
+
+.recipe-header h1 {
+  margin: 0;
+}
+
+.start-form {
+  margin: 0;
+}
+
+.recipe-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
 .duration {
+  margin-top: 12px;
   color: #6c584c;
   font-weight: bold;
 }
@@ -79,10 +102,104 @@ body {
   padding-left: 22px;
 }
 
+.step-player {
+  margin-bottom: 20px;
+}
+
+.step-player-panel {
+  padding: 18px;
+  border-radius: 18px;
+  background: #f7f3e8;
+  border: 1px solid #e6dcc8;
+}
+
+.step-progress {
+  margin: 0 0 8px;
+  color: #6c584c;
+  font-size: 0.95rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.step-current {
+  margin: 0;
+  min-height: 4.5em;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.step-player-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.step-button {
+  display: inline-block;
+  border: none;
+  border-radius: 999px;
+  padding: 11px 18px;
+  font: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+.step-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 18px rgba(74, 58, 46, 0.12);
+}
+
+.step-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  box-shadow: none;
+}
+
+.primary-button {
+  background: #adc178;
+  color: #2f241d;
+  text-decoration: none;
+}
+
+.secondary-button {
+  background: #6c584c;
+  color: #fdfbf6;
+}
+
+.ghost-button {
+  background: #fff;
+  color: #6c584c;
+  border: 1px solid #d6c9b0;
+}
+
+.sr-only-step-list {
+  display: none;
+}
+
+.step-page-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
 .back-link {
   display: inline-block;
   margin-top: 28px;
   text-decoration: none;
   font-weight: bold;
   color: #6c584c;
+}
+
+@media (max-width: 640px) {
+  .recipe-header {
+    grid-template-columns: 1fr;
+    align-items: flex-start;
+  }
+
+  .recipe-actions {
+    justify-content: flex-start;
+  }
 }

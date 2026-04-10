@@ -28,6 +28,7 @@ body {
   list-style: none;
   display: flex;
   gap: 18px;
+  align-items: center;
   margin: 0;
   padding: 0;
 }
@@ -35,6 +36,19 @@ body {
 .navbar-links a {
   color: #f0ead2;
   text-decoration: none;
+}
+
+.nav-form {
+  margin: 0;
+}
+
+.nav-button {
+  background: transparent;
+  border: 0;
+  color: #f0ead2;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
 }
 
 .tutorial-shell {

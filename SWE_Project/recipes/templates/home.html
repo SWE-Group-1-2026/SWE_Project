@@ -14,7 +14,17 @@
       <li><a href="{% url 'search' %}" class="navbar-recipes">Recipes</a></li>
       <li><a href="#features">Features</a></li>
       <li><a href="{% url 'tutorial' %}" class="navbar-cta">How it works</a></li>
+      {% if request.user.is_authenticated %}
+      <li><a href="{% url 'profile' %}" class="navbar-cta">Profile</a></li>
+      <li>
+        <form method="post" action="{% url 'logout' %}" class="nav-form">
+          {% csrf_token %}
+          <button type="submit" class="nav-button navbar-cta">Log Out</button>
+        </form>
+      </li>
+      {% else %}
       <li><a href="{% url 'signup' %}" class="navbar-cta">Sign Up</a></li>
+      {% endif %}
     </ul>
   </nav>
 

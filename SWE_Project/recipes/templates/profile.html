@@ -25,16 +25,48 @@
   <main class="profile-shell">
     <section class="profile-card">
       <p class="eyebrow">Your SousPaw Space</p>
-      <h1>Profile page scaffolded for Django</h1>
-      <p class="lead"><strong>Signed in as:</strong> {{ request.user.email }}</p>
-      <p class="lead">
-        This page is now part of the project routing, so you have a proper place to add
-        saved recipes, pet progress, settings, and user info next.
-      </p>
-      <div class="action-row">
-        <a href="{% url 'search' %}" class="primary-btn">Explore Recipes</a>
-        <a href="{% url 'pet_customizer' %}" class="secondary-btn">Customize Pet</a>
-      </div>
+      <h1>{{ request.user.email }}</h1>
+      <p class="lead">Come back here anytime to reopen recipes you want to make for your kitchen sidekick.</p>
+
+      <section class="saved-section">
+        <div class="section-header">
+          <div>
+            <p class="section-label">Saved Recipes</p>
+            <h2>{{ saved_recipes|length }} recipe{{ saved_recipes|length|pluralize }}</h2>
+          </div>
+          <a href="{% url 'search' %}" class="primary-btn">Explore Recipes</a>
+        </div>
+
+        {% if saved_recipes %}
+          <div class="saved-grid">
+            {% for recipe in saved_recipes %}
+              <article class="saved-card">
+                <p class="saved-tag">{{ recipe.cuisine|default:"Pet Recipe" }}</p>
+                <h3>{{ recipe.recipe_name }}</h3>
+                <p class="saved-time">⏱️ {{ recipe.duration|default:"Time not listed" }}</p>
+                <p class="saved-date">Saved {{ recipe.created_at|date:"M j, Y" }}</p>
+                <div class="saved-actions">
+                  <a href="{% url 'recipe_detail' recipe.recipe_id %}" class="primary-btn">Open Recipe</a>
+                  <form method="post" action="{% url 'toggle_saved_recipe' recipe.recipe_id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{% url 'profile' %}">
+                    <button type="submit" class="secondary-btn">Remove</button>
+                  </form>
+                </div>
+              </article>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="empty-state">
+            <h2>No saved recipes yet</h2>
+            <p>When you save something from a recipe page, it will show up here for quick access.</p>
+            <div class="action-row">
+              <a href="{% url 'search' %}" class="primary-btn">Browse Recipes</a>
+              <a href="{% url 'pet_customizer' %}" class="secondary-btn">Customize Pet</a>
+            </div>
+          </div>
+        {% endif %}
+      </section>
     </section>
   </main>
 </body>

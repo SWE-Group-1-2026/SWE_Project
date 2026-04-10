@@ -33,6 +33,7 @@ a {
   list-style: none;
   display: flex;
   gap: 16px;
+  align-items: center;
   margin: 0;
   padding: 0;
 }
@@ -55,6 +56,16 @@ a {
 
 .navbar-cta:hover {
   background-color: #8A9E56;
+}
+
+.nav-form {
+  margin: 0;
+}
+
+.nav-button {
+  border: none;
+  font: inherit;
+  cursor: pointer;
 }
 
 .navbar-recipes {
@@ -103,6 +114,7 @@ a {
   list-style: none;
   display: flex;
   gap: 16px;
+  align-items: center;
   margin: 0;
   padding: 0;
 }

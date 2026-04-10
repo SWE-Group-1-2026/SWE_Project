@@ -12,7 +12,17 @@
     <a href="{% url 'home' %}" class="navbar-brand">Sous<span>Paw</span></a>
     <ul class="navbar-links">
       <li><a href="{% url 'search' %}">Recipes</a></li>
+      {% if request.user.is_authenticated %}
+      <li><a href="{% url 'profile' %}">Profile</a></li>
+      <li>
+        <form method="post" action="{% url 'logout' %}" class="nav-form">
+          {% csrf_token %}
+          <button type="submit" class="nav-button">Log Out</button>
+        </form>
+      </li>
+      {% else %}
       <li><a href="{% url 'login' %}">Sign In</a></li>
+      {% endif %}
     </ul>
   </nav>
 
