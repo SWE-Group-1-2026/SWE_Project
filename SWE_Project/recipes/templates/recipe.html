@@ -13,10 +13,10 @@
     <nav class="navbar">
         <a href="{% url 'home' %}" class="navbar-brand">Sous<span>Paw</span></a>
         <ul class="navbar-links">
-            <li><a href="{% url 'search' %}">Recipes</a></li>
-            <li><a href="{% url 'pet_customizer' %}">Pet</a></li>
+            <li><a href="{% url 'search' %}" class="navbar-cta">Recipes</a></li>
+            <li><a href="{% url 'pet_customizer' %}" class="navbar-cta">Pet</a></li>
             {% if request.user.is_authenticated %}
-            <li><a href="{% url 'profile' %}">Profile</a></li>
+            <li><a href="{% url 'profile' %}" class="navbar-cta">Profile</a></li>
             {% endif %}
         </ul>
     </nav>
