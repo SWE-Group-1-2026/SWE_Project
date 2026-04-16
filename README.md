@@ -67,21 +67,25 @@ Make sure:
 
 ### 5. Set up Gmail API for verification emails
 
-SousPaw can send verification emails through the Gmail API. Google requires OAuth for this flow.
+SousPaw sends account verification emails through the Gmail API. This uses Google's OAuth flow instead of a normal SMTP password.
 
-1. In Google Cloud, enable the Gmail API.
-2. Configure the OAuth consent screen.
-3. Create an OAuth client for a Desktop app.
-4. Download the client JSON file and save it as `gmail_credentials.json` in the project root.
-5. Copy `.env.example` to `.env`.
-6. Fill in the Gmail API values in `.env`.
-7. Run the one-time authorization command:
+1. Open Google Cloud Console and create or select a project.
+2. Enable the Gmail API for that project.
+3. Set up the OAuth consent screen.
+4. Create an OAuth client with application type `Desktop app`.
+5. Download the OAuth JSON file from Google Cloud.
+6. Save that file in the project root as `gmail_credentials.json`.
+7. Copy `.env.example` to `.env`.
+8. Add your Gmail API settings to `.env`.
+9. Run the one-time authorization command:
 
 ```bash
 python SWE_Project/manage.py setup_gmail_api
 ```
 
-8. Start the server and test signup. The token is saved to `gmail_token.json` and reused for later sends.
+10. A browser window opens. Sign in with the Gmail account you want the app to send from and approve access.
+11. After approval, the app creates `gmail_token.json` in the project root.
+12. Start the server and test signup. Future emails reuse the saved token.
 
 Example `.env`:
 
@@ -89,9 +93,15 @@ Example `.env`:
 EMAIL_PROVIDER=gmail_api
 DEFAULT_FROM_EMAIL=yourgmail@gmail.com
 GMAIL_API_SENDER=yourgmail@gmail.com
-GMAIL_API_CREDENTIALS_FILE=/absolute/path/to/SWE_Project/gmail_credentials.json
-GMAIL_API_TOKEN_FILE=/absolute/path/to/SWE_Project/gmail_token.json
+GMAIL_API_CREDENTIALS_FILE=/Users/yourname/path/to/SWE_Project/gmail_credentials.json
+GMAIL_API_TOKEN_FILE=/Users/yourname/path/to/SWE_Project/gmail_token.json
 ```
+
+Important:
+
+- Do not commit `gmail_credentials.json`, `gmail_token.json`, or `.env`.
+- If signup stays on the same page instead of redirecting to `/verify-email/`, the email send likely failed.
+- If you change Google accounts or regenerate credentials, delete `gmail_token.json` and run `setup_gmail_api` again.
 
 ### 6. Run Django migrations
 
