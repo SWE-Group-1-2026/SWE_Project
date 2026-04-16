@@ -67,6 +67,11 @@ body {
   padding: 0;
 }
 
+.nav-button:hover {
+  color: #f0ead2;
+  text-decoration: underline;
+}
+
 .profile-shell {
   min-height: calc(100vh - 68px);
   display: grid;
