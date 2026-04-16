@@ -68,6 +68,11 @@ a {
   cursor: pointer;
 }
 
+.nav-button:hover {
+  color: #f0ead2;
+  text-decoration: underline;
+}
+
 .navbar-recipes {
   background-color: #a8b28f;
   color: white !important;
