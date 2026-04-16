@@ -11,9 +11,9 @@
   <nav class="navbar">
     <a href="{% url 'home' %}" class="navbar-brand">Sous<span>Paw</span></a>
     <ul class="navbar-links">
-      <li><a href="{% url 'search' %}">Recipes</a></li>
-      <li><a href="{% url 'tutorial' %}">How it works</a></li>
-      <li><a href="{% url 'profile' %}">Profile</a></li>
+      <li><a href="{% url 'search' %}" class="navbar-cta">Recipes</a></li>
+      <li><a href="{% url 'tutorial' %}" class="navbar-cta">How it works</a></li>
+      <li><a href="{% url 'profile' %}" class="navbar-cta">Profile</a></li>
       <li>
         <form method="post" action="{% url 'logout' %}" class="nav-form">
           {% csrf_token %}
