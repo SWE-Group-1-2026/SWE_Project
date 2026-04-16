@@ -65,25 +65,32 @@ Make sure:
 - the database user credentials are valid
 - the `SousPaw` database and `Recipes` collection exist
 
-### 5. Set up Gmail for verification emails
+### 5. Set up Gmail API for verification emails
 
-The signup flow sends a verification email before a new user can log in. The easiest setup is Gmail SMTP with an App Password.
+SousPaw can send verification emails through the Gmail API. Google requires OAuth for this flow.
 
-1. Turn on 2-Step Verification for the Gmail account you want to send from.
-2. Create a Google App Password for that account.
-3. Copy `.env.example` to `.env`.
-4. Replace the placeholder values in `.env` with your Gmail address and App Password.
+1. In Google Cloud, enable the Gmail API.
+2. Configure the OAuth consent screen.
+3. Create an OAuth client for a Desktop app.
+4. Download the client JSON file and save it as `gmail_credentials.json` in the project root.
+5. Copy `.env.example` to `.env`.
+6. Fill in the Gmail API values in `.env`.
+7. Run the one-time authorization command:
+
+```bash
+python SWE_Project/manage.py setup_gmail_api
+```
+
+8. Start the server and test signup. The token is saved to `gmail_token.json` and reused for later sends.
 
 Example `.env`:
 
 ```env
-EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_HOST_USER=yourgmail@gmail.com
-EMAIL_HOST_PASSWORD=your_16_character_app_password
+EMAIL_PROVIDER=gmail_api
 DEFAULT_FROM_EMAIL=yourgmail@gmail.com
-EMAIL_USE_TLS=True
+GMAIL_API_SENDER=yourgmail@gmail.com
+GMAIL_API_CREDENTIALS_FILE=/absolute/path/to/SWE_Project/gmail_credentials.json
+GMAIL_API_TOKEN_FILE=/absolute/path/to/SWE_Project/gmail_token.json
 ```
 
 ### 6. Run Django migrations

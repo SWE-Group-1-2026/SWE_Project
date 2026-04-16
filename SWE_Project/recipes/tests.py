@@ -3,7 +3,9 @@ from unittest.mock import Mock, patch
 
 from django.contrib.auth.models import User
 from django.core import mail
+from django.core.exceptions import ImproperlyConfigured
 from django.test import TestCase
+from django.test.utils import override_settings
 from django.urls import reverse
 
 from .models import PetProfile, SavedRecipe
@@ -29,6 +31,24 @@ class EmailVerificationTests(TestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn("Verify your SousPaw account", mail.outbox[0].subject)
         self.assertIn("verify-email", mail.outbox[0].body)
+
+    @override_settings(EMAIL_PROVIDER="gmail_api")
+    @patch("recipes.views.send_gmail_api_message")
+    def test_signup_can_send_verification_email_with_gmail_api(self, mock_send_gmail_api_message):
+        response = self.client.post(
+            reverse("signup"),
+            {
+                "email": "gmailapi@example.com",
+                "password": "strongpass123",
+                "confirm_password": "strongpass123",
+            },
+        )
+
+        self.assertRedirects(
+            response,
+            f"{reverse('verify_email_notice')}?email=gmailapi%40example.com",
+        )
+        mock_send_gmail_api_message.assert_called_once()
 
     def test_unverified_user_is_redirected_to_verify_notice_on_login(self):
         User.objects.create_user(
@@ -95,6 +115,21 @@ class EmailVerificationTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "send the verification email right now")
         self.assertFalse(User.objects.filter(username="mailfail@example.com").exists())
+
+    @override_settings(EMAIL_PROVIDER="bad-value")
+    def test_signup_shows_friendly_error_for_invalid_email_provider(self):
+        response = self.client.post(
+            reverse("signup"),
+            {
+                "email": "badprovider@example.com",
+                "password": "strongpass123",
+                "confirm_password": "strongpass123",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "send the verification email right now")
+        self.assertFalse(User.objects.filter(username="badprovider@example.com").exists())
 
 
 class PetCustomizerViewTests(TestCase):

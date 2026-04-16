@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
+from django.core.exceptions import ImproperlyConfigured
 from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
@@ -15,6 +16,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils import timezone
 
+from .gmail_api import send_gmail_api_message
 from .models import PetProfile, SavedRecipe
 
 
@@ -122,15 +124,31 @@ def _send_verification_email(request, user):
         reverse("verify_email_confirm", args=[uid, token])
     )
 
+    subject = "Verify your SousPaw account"
+    message = (
+        f"Hi {user.email},\n\n"
+        "Thanks for signing up for SousPaw.\n"
+        "Please verify your email address by clicking the link below:\n\n"
+        f"{verification_link}\n\n"
+        "If you did not create this account, you can ignore this email."
+    )
+
+    if settings.EMAIL_PROVIDER == "gmail_api":
+        send_gmail_api_message(
+            to_email=user.email,
+            subject=subject,
+            body=message,
+        )
+        return
+
+    if settings.EMAIL_PROVIDER != "django":
+        raise ImproperlyConfigured(
+            "EMAIL_PROVIDER must be either 'django' or 'gmail_api'."
+        )
+
     send_mail(
-        subject="Verify your SousPaw account",
-        message=(
-            f"Hi {user.email},\n\n"
-            "Thanks for signing up for SousPaw.\n"
-            "Please verify your email address by clicking the link below:\n\n"
-            f"{verification_link}\n\n"
-            "If you did not create this account, you can ignore this email."
-        ),
+        subject=subject,
+        message=message,
         from_email=settings.DEFAULT_FROM_EMAIL,
         recipient_list=[user.email],
         fail_silently=False,
