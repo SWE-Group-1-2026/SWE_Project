@@ -13,6 +13,7 @@
     <ul class="navbar-links">
       {% if request.user.is_authenticated %}
       <li><a href="{% url 'profile' %}" class="navbar-cta">Profile</a></li>
+      <li><a href="{% url 'pet_customizer' %}" class="navbar-cta">Pet</a></li>
       <li>
         <form method="post" action="{% url 'logout' %}" class="nav-form">
           {% csrf_token %}
@@ -22,7 +23,6 @@
       {% else %}
       <li><a href="{% url 'login' %}" class="navbar-cta">Sign In</a></li>
       {% endif %}
-      <li><a href="{% url 'pet_customizer' %}" class="navbar-cta">Pet</a></li>
       <li><a href="{% url 'home' %}" class="navbar-cta">Home</a></li>
     </ul>
   </nav>
