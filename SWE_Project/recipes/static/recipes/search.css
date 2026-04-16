@@ -40,9 +40,6 @@ body {
   border: none;
   font: inherit;
   cursor: pointer;
-}
-
-.navbar-button:hover {
   text-decoration: underline;
 }
 
