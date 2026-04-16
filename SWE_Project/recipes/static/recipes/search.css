@@ -42,6 +42,10 @@ body {
   cursor: pointer;
 }
 
+.navbar-button:hover {
+  text-decoration: underline;
+}
+
 .search-container {
   max-width: 900px;
   margin: 60px auto;
