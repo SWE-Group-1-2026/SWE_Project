@@ -60,12 +60,14 @@ body {
 }
 
 .nav-button {
-  background: transparent;
-  border: 0;
-  color: #f0ead2;
+  border: none;
   cursor: pointer;
   font: inherit;
-  padding: 0;
+}
+
+.nav-button:hover {
+  color: #f0ead2;
+  text-decoration: underline;
 }
 
 .tutorial-shell {
