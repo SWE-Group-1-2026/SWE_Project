@@ -26,16 +26,19 @@ body {
 
 .navbar-links a {
   color: #F0EAD2;
+  display: flex;
   text-decoration: none;
   font-size: 0.95rem;
   transition: text-decoration 0.2s;
 }
 
 .navbar-links a:hover {
+  display: flex;
   text-decoration: underline;
 }
 
 .navbar-cta {
+  display: flex; 
   background-color: #ADC178;
   color: white !important;
   padding: 8px 16px;
@@ -44,11 +47,13 @@ body {
 }
 
 .navbar-cta:hover {
+  display: flex;
   background-color: #8A9E56;
   text-decoration: none;
 }
 
 .navbar-recipes {
+  display: flex;
   background-color: #a8b28f;
   color: white !important;
   padding: 8px 16px;
@@ -57,11 +62,13 @@ body {
 }
 
 .navbar-recipes:hover {
+  display: flex;
   background-color: #7b875b;
   text-decoration: none !important; 
 }
 
 .navbar-links a:not(.navbar-cta):not(.navbar-recipes):hover {
+  display: flex;
   text-decoration: underline;
 }
 
