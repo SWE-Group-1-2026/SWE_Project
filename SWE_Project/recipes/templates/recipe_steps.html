@@ -15,7 +15,11 @@
         <a href="{% url 'home' %}" class="navbar-brand">Sous<span>Paw</span></a>
         <ul class="navbar-links">
             <li><a href="{% url 'search' %}" class="navbar-cta">Recipes</a></li>
+            {% if request.user.is_authenticated %}
             <li><a href="{% url 'pet_customizer' %}" class="navbar-cta">Pet</a></li>
+            {% else %}
+            <li><a href="{% url 'login' %}" class="navbar-cta">Sign In</a></li>
+            {% endif %}
             <li><a href="{% url 'home' %}" class="navbar-cta">Home</a></li>
         </ul>
     </nav>
