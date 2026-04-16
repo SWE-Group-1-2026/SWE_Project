@@ -37,6 +37,23 @@ body {
   text-decoration: none;
 }
 
+.navbar-links a:hover {
+  text-decoration: underline;
+}
+
+.navbar-cta {
+  background-color: #ADC178;
+  color: white !important;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.navbar-cta:hover {
+  background-color: #8A9E56;
+  text-decoration: none;
+}
+
 .page {
   min-height: calc(100vh - 70px);
   display: flex;
