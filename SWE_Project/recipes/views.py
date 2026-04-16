@@ -1,3 +1,5 @@
+import logging
+import os
 from urllib.parse import urlencode
 
 from django.conf import settings
@@ -16,13 +18,19 @@ from django.utils import timezone
 from .models import PetProfile, SavedRecipe
 
 
+logger = logging.getLogger(__name__)
+
 MONGO_URI = (
-    "mongodb+srv://eeshakondlapudi_db_user:Eesha1234@cluster1.sveryx9.mongodb.net/"
+    os.getenv("MONGO_URI")
+    or "mongodb+srv://eeshakondlapudi_db_user:Eesha1234@cluster1.sveryx9.mongodb.net/"
     "?appName=Cluster1"
 )
+MONGO_DB_NAME = os.getenv("MONGO_DB_NAME", "SousPaw")
+MONGO_RECIPE_COLLECTION = os.getenv("MONGO_RECIPE_COLLECTION", "Recipes")
+MONGO_USER_COLLECTION = os.getenv("MONGO_USER_COLLECTION", "userLogin")
 
 
-def _get_recipe_collection():
+def _get_mongo_client():
     try:
         import certifi
         from pymongo import MongoClient
@@ -38,41 +46,34 @@ def _get_recipe_collection():
             connectTimeoutMS=2000,
             socketTimeoutMS=2000,
         )
-        db = client["SousPaw"]
-        return db["Recipes"], None
-    except PyMongoError:
+        client.admin.command("ping")
+        return client, None
+    except PyMongoError as exc:
+        logger.warning("MongoDB connection failed: %s", exc)
         return (
             None,
-            "Recipe search is temporarily unavailable because the MongoDB service could not be reached.",
+            "Recipe search is temporarily unavailable because MongoDB could not be reached.",
         )
-    except Exception:
+    except Exception as exc:
+        logger.exception("Unexpected MongoDB connection failure: %s", exc)
         return (
             None,
-            "Recipe search is temporarily unavailable because the MongoDB service could not be reached.",
+            "Recipe search is temporarily unavailable because MongoDB could not be reached.",
         )
+
+
+def _get_recipe_collection():
+    client, error_message = _get_mongo_client()
+    if client is None:
+        return None, error_message
+    return client[MONGO_DB_NAME][MONGO_RECIPE_COLLECTION], None
 
 
 def _get_mongo_database():
-    try:
-        import certifi
-        from pymongo import MongoClient
-        from pymongo.errors import PyMongoError
-    except ImportError:
-        return None, "MongoDB dependencies are unavailable."
-
-    try:
-        client = MongoClient(
-            MONGO_URI,
-            tlsCAFile=certifi.where(),
-            serverSelectionTimeoutMS=2000,
-            connectTimeoutMS=2000,
-            socketTimeoutMS=2000,
-        )
-        return client["SousPaw"], None
-    except PyMongoError:
-        return None, "MongoDB could not be reached."
-    except Exception:
-        return None, "MongoDB could not be reached."
+    client, error_message = _get_mongo_client()
+    if client is None:
+        return None, error_message or "MongoDB could not be reached."
+    return client[MONGO_DB_NAME], None
 
 
 def _sync_user_login_document(user, event_type):
@@ -80,7 +81,7 @@ def _sync_user_login_document(user, event_type):
     if db is None:
         return
 
-    user_login_collection = db["userLogin"]
+    user_login_collection = db[MONGO_USER_COLLECTION]
     now = timezone.now().isoformat()
     update_fields = {
         "email": user.email,
@@ -95,16 +96,19 @@ def _sync_user_login_document(user, event_type):
         update_fields["signup_at"] = now
         update_fields["last_login_at"] = None
 
-    user_login_collection.update_one(
-        {"django_user_id": user.id},
-        {
-            "$set": update_fields,
-            "$setOnInsert": {
-                "created_at": now,
+    try:
+        user_login_collection.update_one(
+            {"django_user_id": user.id},
+            {
+                "$set": update_fields,
+                "$setOnInsert": {
+                    "created_at": now,
+                },
             },
-        },
-        upsert=True,
-    )
+            upsert=True,
+        )
+    except Exception as exc:
+        logger.warning("Failed to sync user login document to MongoDB: %s", exc)
 
 
 def _verification_notice_redirect(email):
