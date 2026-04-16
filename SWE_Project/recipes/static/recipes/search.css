@@ -40,6 +40,10 @@ body {
   border: none;
   font: inherit;
   cursor: pointer;
+}
+
+.nav-button:hover {
+  color: #f0ead2;
   text-decoration: underline;
 }
 
