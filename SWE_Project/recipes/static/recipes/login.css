@@ -24,11 +24,6 @@ body {
   padding: 0;
 }
 
-.navbar-links li {
-  display: flex;
-  align-items: center;
-}
-
 .navbar-links a {
   color: #F0EAD2;
   text-decoration: none;
@@ -45,14 +40,29 @@ body {
   color: white !important;
   padding: 8px 16px;
   border-radius: 6px;
-  text-decoration: none !important;
-  transition: background-color 0.2s, transform 0.1s;
+  transition: background-color 0.2s;
 }
 
 .navbar-cta:hover {
   background-color: #8A9E56;
-  text-decoration: none !important;
-  transform: translateY(-1px); 
+  text-decoration: none;
+}
+
+.navbar-recipes {
+  background-color: #a8b28f;
+  color: white !important;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none !important; 
+}
+
+.navbar-recipes:hover {
+  background-color: #7b875b;
+  text-decoration: none !important; 
+}
+
+.navbar-links a:not(.navbar-cta):not(.navbar-recipes):hover {
+  text-decoration: underline;
 }
 
 .page {
