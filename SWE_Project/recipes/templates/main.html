@@ -13,6 +13,9 @@
     <ul class="navbar-links">
       <li><a href="{% url 'search' %}" class="navbar-cta">Recipes</a></li>
       <li><a href="{% url 'tutorial' %}" class="navbar-cta">How it works</a></li>
+      {% if request.user.is_staff or request.user.is_superuser %}
+      <li><a href="{% url 'admin_dashboard' %}" class="navbar-cta">Admin</a></li>
+      {% endif %}
       <li><a href="{% url 'profile' %}" class="navbar-cta">Profile</a></li>
       <li>
         <form method="post" action="{% url 'logout' %}" class="nav-form">
@@ -28,6 +31,9 @@
     <div class="customizer">
       <h1>Customize Your Pet</h1>
       <p>Build the kitchen buddy that will cheer you on through every recipe.</p>
+      {% if request.user.is_staff or request.user.is_superuser %}
+      <p class="status-message success">Admin account detected. You can manage app activity from the admin dashboard.</p>
+      {% endif %}
       {% if success_message %}
       <p class="status-message success">{{ success_message }}</p>
       {% endif %}

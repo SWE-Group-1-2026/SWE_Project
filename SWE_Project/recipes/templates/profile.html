@@ -13,6 +13,9 @@
     <ul class="navbar-links">
       <li><a href="{% url 'search' %}" class="navbar-cta">Recipes</a></li>
       <li><a href="{% url 'pet_customizer' %}" class="navbar-cta">Pet</a></li>
+      {% if is_admin %}
+      <li><a href="{% url 'admin_dashboard' %}" class="navbar-cta">Admin</a></li>
+      {% endif %}
       <li>
         <form method="post" action="{% url 'logout' %}" class="nav-form">
           {% csrf_token %}
@@ -27,7 +30,24 @@
     <section class="profile-card">
       <p class="eyebrow">Your SousPaw Space</p>
       <h1>{{ request.user.email }}</h1>
+      <p class="lead">Role: {% if is_admin %}Admin{% else %}User{% endif %}</p>
       <p class="lead">Come back here anytime to reopen recipes you want to make for your kitchen sidekick.</p>
+
+      {% if is_admin %}
+        <section class="saved-section">
+          <div class="section-header">
+            <div>
+              <p class="section-label">Admin Tools</p>
+              <h2>Extra options available</h2>
+            </div>
+            <div class="saved-actions">
+              <a href="{% url 'admin_dashboard' %}" class="primary-btn">Open Dashboard</a>
+              <a href="{% url 'admin_add_recipe' %}" class="secondary-btn">Add Recipe</a>
+            </div>
+          </div>
+          <p class="lead">Admins can review registered accounts, monitor activity, and add new recipes from one place.</p>
+        </section>
+      {% endif %}
 
       <section class="saved-section">
         <div class="section-header">

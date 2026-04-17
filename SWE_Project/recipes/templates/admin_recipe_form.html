@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SousPaw - Add Recipe</title>
+  <link rel="stylesheet" href="{% static 'recipes/signup.css' %}">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="{% url 'home' %}" class="navbar-brand">Sous<span>Paw</span></a>
+    <ul class="navbar-links">
+      <li><a href="{% url 'admin_dashboard' %}" class="navbar-cta">Admin</a></li>
+      <li><a href="{% url 'search' %}" class="navbar-cta">Recipes</a></li>
+      <li><a href="{% url 'profile' %}" class="navbar-cta">Profile</a></li>
+      <li>
+        <form method="post" action="{% url 'logout' %}" class="nav-form">
+          {% csrf_token %}
+          <button type="submit" class="nav-button navbar-cta">Log Out</button>
+        </form>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="page">
+    <div class="auth-card" style="max-width: 720px;">
+      <h1>Add Recipe</h1>
+      <p class="subtitle">Create a recipe using the same schema used by the recipe search and detail pages.</p>
+
+      <form method="post">
+        {% csrf_token %}
+
+        <div id="auth-error"{% if not error_message %} style="display: none;"{% endif %}>{{ error_message }}</div>
+        <div id="auth-success"{% if not success_message %} style="display: none;"{% endif %}>{{ success_message }}</div>
+
+        <div class="input-group">
+          <label for="recipe-name">Recipe Name</label>
+          <input id="recipe-name" name="recipe_name" type="text" placeholder="Pumpkin Bites" value="{{ form_values.recipe_name }}">
+        </div>
+
+        <div class="input-group">
+          <label for="cuisine">Cuisine</label>
+          <input id="cuisine" name="cuisine" type="text" placeholder="Homestyle" value="{{ form_values.cuisine }}">
+        </div>
+
+        <div class="input-group">
+          <label for="duration">Duration</label>
+          <input id="duration" name="duration" type="text" placeholder="20 minutes" value="{{ form_values.duration }}">
+        </div>
+
+        <div class="input-group">
+          <label for="ingredients">Ingredients</label>
+          <textarea id="ingredients" name="ingredients" rows="6" placeholder="One ingredient per line">{{ form_values.ingredients }}</textarea>
+          <p class="password-hint">Enter one ingredient per line.</p>
+        </div>
+
+        <div class="input-group">
+          <label for="recipe-steps">Recipe Steps</label>
+          <textarea id="recipe-steps" name="recipe_steps" rows="6" placeholder="One step per line">{{ form_values.recipe_steps }}</textarea>
+          <p class="password-hint">Enter one recipe step per line.</p>
+        </div>
+
+        <button type="submit" class="submit-btn">Save Recipe</button>
+      </form>
+
+      <p class="switch-link">
+        Need to review admin activity first? <a href="{% url 'admin_dashboard' %}">Back to dashboard</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

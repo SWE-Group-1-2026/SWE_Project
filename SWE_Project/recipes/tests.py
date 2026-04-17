@@ -8,6 +8,7 @@ from django.test import TestCase
 from django.test.utils import override_settings
 from django.urls import reverse
 
+from . import views
 from .models import PetProfile, SavedRecipe
 
 
@@ -280,3 +281,140 @@ class ProfileViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Blueberry Biscuits")
         self.assertContains(response, "Open Recipe")
+
+    def test_profile_shows_regular_user_role_without_admin_link(self):
+        self.client.login(username="profile@example.com", password="testpass123")
+
+        response = self.client.get(reverse("profile"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Role: User")
+        self.assertNotContains(response, reverse("admin_dashboard"))
+
+
+class AdminAccessTests(TestCase):
+    def setUp(self):
+        self.admin_user = User.objects.create_user(
+            username="admin@example.com",
+            email="admin@example.com",
+            password="testpass123",
+            is_staff=True,
+        )
+        self.regular_user = User.objects.create_user(
+            username="user@example.com",
+            email="user@example.com",
+            password="testpass123",
+        )
+
+    def test_admin_dashboard_requires_login(self):
+        response = self.client.get(reverse("admin_dashboard"))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(reverse("login"), response.url)
+
+    def test_regular_user_cannot_open_admin_dashboard(self):
+        self.client.login(username="user@example.com", password="testpass123")
+
+        response = self.client.get(reverse("admin_dashboard"))
+
+        self.assertEqual(response.status_code, 403)
+
+    def test_admin_login_redirects_to_admin_dashboard(self):
+        response = self.client.post(
+            reverse("login"),
+            {
+                "email": "admin@example.com",
+                "password": "testpass123",
+            },
+        )
+
+        self.assertRedirects(response, reverse("admin_dashboard"))
+
+    def test_admin_user_can_open_admin_dashboard_and_see_user_roles(self):
+        SavedRecipe.objects.create(
+            user=self.regular_user,
+            recipe_id="admin-check",
+            recipe_name="Admin Recipe",
+            cuisine="Testing",
+            duration="15 minutes",
+        )
+        self.client.login(username="admin@example.com", password="testpass123")
+
+        response = self.client.get(reverse("admin_dashboard"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Admin Dashboard")
+        self.assertContains(response, "admin@example.com")
+        self.assertContains(response, "user@example.com")
+        self.assertContains(response, "Admins")
+        self.assertContains(response, "Saved recipes: 1")
+
+    def test_admin_profile_shows_extra_options(self):
+        self.client.login(username="admin@example.com", password="testpass123")
+
+        response = self.client.get(reverse("profile"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Role: Admin")
+        self.assertContains(response, reverse("admin_dashboard"))
+        self.assertContains(response, reverse("admin_add_recipe"))
+
+    def test_regular_user_cannot_open_admin_recipe_form(self):
+        self.client.login(username="user@example.com", password="testpass123")
+
+        response = self.client.get(reverse("admin_add_recipe"))
+
+        self.assertEqual(response.status_code, 403)
+
+    @patch("recipes.views._get_mongo_database")
+    def test_admin_can_add_recipe_from_form(self, mock_get_mongo_database):
+        insert_result = Mock(inserted_id="507f1f77bcf86cd799439012")
+        mock_recipe_collection = Mock()
+        mock_recipe_collection.insert_one.return_value = insert_result
+        mock_db = {views.MONGO_RECIPE_COLLECTION: mock_recipe_collection}
+        mock_get_mongo_database.return_value = (mock_db, None)
+
+        self.client.login(username="admin@example.com", password="testpass123")
+
+        response = self.client.post(
+            reverse("admin_add_recipe"),
+            {
+                "recipe_name": "Pumpkin Bites",
+                "cuisine": "Homestyle",
+                "duration": "20 minutes",
+                "ingredients": "Pumpkin\nOats\nCinnamon",
+                "recipe_steps": "Mix ingredients\nBake until soft",
+            },
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("recipe_detail", args=["507f1f77bcf86cd799439012"]),
+        )
+        mock_recipe_collection.insert_one.assert_called_once()
+        saved_document = mock_recipe_collection.insert_one.call_args.args[0]
+        self.assertEqual(saved_document["recipe_name"], "Pumpkin Bites")
+        self.assertEqual(saved_document["cuisine"], "Homestyle")
+        self.assertEqual(saved_document["duration"], "20 minutes")
+        self.assertEqual(saved_document["ingredients"], ["Pumpkin", "Oats", "Cinnamon"])
+        self.assertEqual(saved_document["recipe_steps"], ["Mix ingredients", "Bake until soft"])
+        self.assertEqual(saved_document["created_by"], "admin@example.com")
+
+    @patch("recipes.views._get_mongo_database")
+    def test_admin_add_recipe_shows_validation_error_for_missing_steps(self, mock_get_mongo_database):
+        self.client.login(username="admin@example.com", password="testpass123")
+
+        response = self.client.post(
+            reverse("admin_add_recipe"),
+            {
+                "recipe_name": "Pumpkin Bites",
+                "cuisine": "Homestyle",
+                "duration": "20 minutes",
+                "ingredients": "Pumpkin\nOats",
+                "recipe_steps": "",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Add at least one recipe step.")
+        mock_get_mongo_database.assert_not_called()

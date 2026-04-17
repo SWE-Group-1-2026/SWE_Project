@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SousPaw - Admin Dashboard</title>
+  <link rel="stylesheet" href="{% static 'recipes/profile.css' %}">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="{% url 'home' %}" class="navbar-brand">Sous<span>Paw</span></a>
+    <ul class="navbar-links">
+      <li><a href="{% url 'search' %}" class="navbar-cta">Recipes</a></li>
+      <li><a href="{% url 'pet_customizer' %}" class="navbar-cta">Pet</a></li>
+      <li><a href="{% url 'profile' %}" class="navbar-cta">Profile</a></li>
+      <li>
+        <form method="post" action="{% url 'logout' %}" class="nav-form">
+          {% csrf_token %}
+          <button type="submit" class="nav-button navbar-cta">Log Out</button>
+        </form>
+      </li>
+    </ul>
+  </nav>
+
+  <main class="profile-shell">
+    <section class="profile-card">
+      <p class="eyebrow">Admin Access</p>
+      <h1>Admin Dashboard</h1>
+      <p class="lead">This area is only visible to authenticated admins.</p>
+
+      <section class="saved-section">
+        <div class="section-header">
+          <div>
+            <p class="section-label">Overview</p>
+            <h2>{{ total_users }} account{{ total_users|pluralize }}</h2>
+          </div>
+          <div class="saved-actions">
+            <a href="{% url 'admin_add_recipe' %}" class="primary-btn">Add Recipe</a>
+            <a href="{% url 'profile' %}" class="secondary-btn">Back to Profile</a>
+          </div>
+        </div>
+
+        <div class="saved-grid">
+          <article class="saved-card">
+            <p class="saved-tag">Admins</p>
+            <h3>{{ total_admins }}</h3>
+            <p class="saved-time">Accounts with elevated access</p>
+          </article>
+          <article class="saved-card">
+            <p class="saved-tag">Saved Recipes</p>
+            <h3>{{ total_saved_recipes }}</h3>
+            <p class="saved-time">Recipes saved across all users</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="saved-section">
+        <div class="section-header">
+          <div>
+            <p class="section-label">User Access</p>
+            <h2>Registered Accounts</h2>
+          </div>
+        </div>
+
+        {% if users %}
+          <div class="saved-grid">
+            {% for user in users %}
+              <article class="saved-card">
+                <p class="saved-tag">{% if user.is_staff or user.is_superuser %}Admin{% else %}User{% endif %}</p>
+                <h3>{{ user.email|default:user.username }}</h3>
+                <p class="saved-time">Saved recipes: {{ user.saved_recipe_count }}</p>
+                <p class="saved-date">Status: {% if user.is_active %}Active{% else %}Pending verification{% endif %}</p>
+              </article>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="empty-state">
+            <h2>No users found</h2>
+            <p>Once people create accounts, they will appear here.</p>
+          </div>
+        {% endif %}
+      </section>
+    </section>
+  </main>
+</body>
+</html>

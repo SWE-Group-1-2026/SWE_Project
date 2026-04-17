@@ -6,11 +6,13 @@ from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db.models import Count
 from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import ImproperlyConfigured
 from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
+from django.http import HttpResponseForbidden
 from django.urls import reverse
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
@@ -30,6 +32,26 @@ MONGO_URI = (
 MONGO_DB_NAME = os.getenv("MONGO_DB_NAME", "SousPaw")
 MONGO_RECIPE_COLLECTION = os.getenv("MONGO_RECIPE_COLLECTION", "Recipes")
 MONGO_USER_COLLECTION = os.getenv("MONGO_USER_COLLECTION", "userLogin")
+
+
+def _is_admin(user):
+    return user.is_authenticated and (user.is_staff or user.is_superuser)
+
+
+def _require_admin(request):
+    if _is_admin(request.user):
+        return None
+    return HttpResponseForbidden("You do not have permission to access this page.")
+
+
+def _get_post_login_redirect(user):
+    if _is_admin(user):
+        return "admin_dashboard"
+    return "pet_customizer"
+
+
+def _parse_multiline_list(raw_value):
+    return [item.strip() for item in raw_value.splitlines() if item.strip()]
 
 
 def _get_mongo_client():
@@ -161,7 +183,7 @@ def home(request):
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect("pet_customizer")
+        return redirect(_get_post_login_redirect(request.user))
 
     context = {"error_message": None, "submitted_email": ""}
 
@@ -187,14 +209,14 @@ def login_view(request):
             else:
                 login(request, user)
                 _sync_user_login_document(user, "login")
-                return redirect("pet_customizer")
+                return redirect(_get_post_login_redirect(user))
 
     return render(request, "login.html", context)
 
 
 def signup_view(request):
     if request.user.is_authenticated:
-        return redirect("pet_customizer")
+        return redirect(_get_post_login_redirect(request.user))
 
     context = {
         "error_message": None,
@@ -316,8 +338,105 @@ def profile_view(request):
         "profile.html",
         {
             "saved_recipes": request.user.saved_recipes.all(),
+            "is_admin": _is_admin(request.user),
         },
     )
+
+
+@login_required
+def admin_dashboard(request):
+    denied_response = _require_admin(request)
+    if denied_response is not None:
+        return denied_response
+
+    users = (
+        User.objects.order_by("email", "username")
+        .annotate(saved_recipe_count=Count("saved_recipes"))
+    )
+
+    return render(
+        request,
+        "admin_dashboard.html",
+        {
+            "total_users": users.count(),
+            "total_admins": sum(1 for user in users if _is_admin(user)),
+            "total_saved_recipes": SavedRecipe.objects.count(),
+            "users": users,
+        },
+    )
+
+
+@login_required
+def admin_add_recipe(request):
+    denied_response = _require_admin(request)
+    if denied_response is not None:
+        return denied_response
+
+    context = {
+        "error_message": None,
+        "success_message": None,
+        "form_values": {
+            "recipe_name": "",
+            "cuisine": "",
+            "duration": "",
+            "ingredients": "",
+            "recipe_steps": "",
+        },
+    }
+
+    if request.method == "POST":
+        recipe_name = request.POST.get("recipe_name", "").strip()
+        cuisine = request.POST.get("cuisine", "").strip()
+        duration = request.POST.get("duration", "").strip()
+        ingredients_raw = request.POST.get("ingredients", "").strip()
+        recipe_steps_raw = request.POST.get("recipe_steps", "").strip()
+
+        context["form_values"] = {
+            "recipe_name": recipe_name,
+            "cuisine": cuisine,
+            "duration": duration,
+            "ingredients": ingredients_raw,
+            "recipe_steps": recipe_steps_raw,
+        }
+
+        ingredients = _parse_multiline_list(ingredients_raw)
+        recipe_steps = _parse_multiline_list(recipe_steps_raw)
+
+        if not recipe_name:
+            context["error_message"] = "Recipe name is required."
+        elif not cuisine:
+            context["error_message"] = "Cuisine is required."
+        elif not duration:
+            context["error_message"] = "Duration is required."
+        elif not ingredients:
+            context["error_message"] = "Add at least one ingredient."
+        elif not recipe_steps:
+            context["error_message"] = "Add at least one recipe step."
+        else:
+            db, error_message = _get_mongo_database()
+            if db is None:
+                context["error_message"] = error_message or "MongoDB could not be reached."
+            else:
+                recipe_collection = db[MONGO_RECIPE_COLLECTION]
+                recipe_document = {
+                    "recipe_name": recipe_name,
+                    "cuisine": cuisine,
+                    "duration": duration,
+                    "ingredients": ingredients,
+                    "recipe_steps": recipe_steps,
+                    "created_by": request.user.email or request.user.username,
+                    "created_at": timezone.now().isoformat(),
+                }
+                try:
+                    result = recipe_collection.insert_one(recipe_document)
+                except Exception:
+                    context["error_message"] = (
+                        "The recipe could not be saved right now. Please try again."
+                    )
+                else:
+                    return redirect("recipe_detail", id=str(result.inserted_id))
+
+    return render(request, "admin_recipe_form.html", context)
 
 
 def tutorial_view(request):

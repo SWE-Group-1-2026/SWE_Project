@@ -57,17 +57,31 @@ body {
 
 .nav-form {
   margin: 0;
+  display: flex;
 }
 
 .nav-button {
+  background-color: #ADC178;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
   border: none;
   cursor: pointer;
   font: inherit;
+  line-height: 1.2;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: background-color 0.2s;
 }
 
 .nav-button:hover {
-  color: #f0ead2;
-  text-decoration: underline;
+  background-color: #8A9E56;
+  text-decoration: none;
+}
+
+.nav-button:focus-visible {
+  outline: 2px solid #f0ead2;
+  outline-offset: 2px;
 }
 
 .tutorial-shell {
