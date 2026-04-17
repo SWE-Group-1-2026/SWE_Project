@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const startButton = player.querySelector("[data-start-button]");
   const panel = player.querySelector("[data-step-panel]");
   const progress = player.querySelector("[data-step-progress]");
+  const progressPercent = player.querySelector("[data-progress-percent]");
   const progressFill = player.querySelector("[data-progress-fill]");
   const current = player.querySelector("[data-step-current]");
   const prevButton = player.querySelector("[data-prev-button]");
@@ -25,11 +26,13 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentIndex = 0;
 
   const renderStep = () => {
+    const percentComplete = Math.round(((currentIndex + 1) / steps.length) * 100);
     progress.textContent = `Step ${currentIndex + 1} of ${steps.length}`;
+    progressPercent.textContent = `${percentComplete}% complete`;
     current.textContent = steps[currentIndex];
     prevButton.disabled = currentIndex === 0;
     nextButton.disabled = currentIndex === steps.length - 1;
-    progressFill.style.width = `${((currentIndex + 1) / steps.length) * 100}%`;
+    progressFill.style.width = `${percentComplete}%`;
   };
 
   if (startButton && panel) {

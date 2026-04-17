@@ -12,7 +12,6 @@
     <a href="{% url 'home' %}" class="navbar-brand">Sous<span>Paw</span></a>
     <ul class="navbar-links">
       <li><a href="{% url 'search' %}" class="navbar-cta">Recipes</a></li>
-      <li><a href="{% url 'tutorial' %}" class="navbar-cta">How it works</a></li>
       {% if request.user.is_staff or request.user.is_superuser %}
       <li><a href="{% url 'admin_dashboard' %}" class="navbar-cta">Admin</a></li>
       {% endif %}

@@ -30,7 +30,6 @@
     <section class="profile-card">
       <p class="eyebrow">Your SousPaw Space</p>
       <h1>{{ request.user.email }}</h1>
-      <p class="lead">Role: {% if is_admin %}Admin{% else %}User{% endif %}</p>
       <p class="lead">Come back here anytime to reopen recipes you want to make for your kitchen sidekick.</p>
 
       {% if is_admin %}

@@ -43,8 +43,16 @@
                     <p class="step-progress" data-step-progress aria-live="polite"></p>
                     <p class="step-current" data-step-current></p>
 
-                    <div class="progress-bar-container">
-                        <div class="progress-bar-fill" data-progress-fill></div>
+                    <p class="progress-percent" data-progress-percent aria-live="polite"></p>
+                    <div
+                        class="progress-bar-container"
+                        style="width: 100%; height: 16px; background-color: #d8d1c3; border: 1px solid #c9bda5; border-radius: 50px; box-shadow: inset 0 1px 2px rgba(74, 58, 46, 0.16); margin: 12px 0 24px; overflow: hidden;"
+                    >
+                        <div
+                            class="progress-bar-fill"
+                            data-progress-fill
+                            style="height: 100%; width: 0%; display: block; background: linear-gradient(90deg, #adc178, #6a8c3a); border-radius: 50px; box-shadow: 0 0 10px rgba(138, 158, 86, 0.35);"
+                        ></div>
                     </div>
 
                     <div class="step-player-actions">
