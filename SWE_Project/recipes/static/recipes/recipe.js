@@ -63,6 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   restartButton.addEventListener("click", () => {
     currentIndex = 0;
+    progressFill.style.width = "0%";
     renderStep();
   });
 });

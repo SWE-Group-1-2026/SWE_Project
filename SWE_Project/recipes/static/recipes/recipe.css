@@ -233,7 +233,7 @@ body {
 .progress-bar-fill {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, #f4a261, #e76f51);
+  background: linear-gradient(90deg, #adc178, #6a8c3a);
   border-radius: 50px;
   transition: width 0.35s ease;
 }
