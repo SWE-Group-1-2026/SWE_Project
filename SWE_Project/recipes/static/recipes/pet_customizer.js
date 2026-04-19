@@ -1,11 +1,11 @@
 const petImages = {
   dog: {
-    Male: "/static/recipes/images/male_dog_design.png",
-    Female: "/static/recipes/images/female_dog_design.png",
+    Male: "/static/recipes/images/M_DOG_design.png",
+    Female: "/static/recipes/images/F_DOG_design.png",
   },
   cat: {
-    Male: "/static/recipes/images/male_cat_design.png",
-    Female: "/static/recipes/images/female_cat_design.png",
+    Male: "/static/recipes/images/M_CAT_design.png",
+    Female: "/static/recipes/images/F_CAT_design.png",
   },
 };
 
