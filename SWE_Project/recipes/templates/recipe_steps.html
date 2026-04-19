@@ -40,6 +40,14 @@
 
             <section class="step-player" data-step-player>
                 <div class="step-player-panel" data-step-panel>
+                   {% if request.user.is_authenticated %} 
+                    <div class="pet-display" 
+                        id="pet-config" 
+                        data-gender="{{ pet_profile.gender }}" 
+                        data-species="{{ pet_profile.species }}">
+                        <img id="sous-paw-pet" src="" alt="Sous-Chef Pet" class="pet-image">
+                    </div>
+                    {% endif %}
                     <p class="step-progress" data-step-progress aria-live="polite"></p>
                     <p class="step-current" data-step-current></p>
 
