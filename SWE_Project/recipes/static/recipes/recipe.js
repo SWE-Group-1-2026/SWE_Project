@@ -4,8 +4,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!player || !petConfig) {
     return;
   }
-
-  const GITHUB_BASE = "https://raw.githubusercontent.com/SWE-Group-1-2026/SWE_Project/main/SWE_Project/recipes/static/recipes/images/";
   const genderInit = petConfig.getAttribute("data-gender").charAt(0).toUpperCase();
   const species = petConfig.getAttribute("data-species").toUpperCase();
 
@@ -65,16 +63,19 @@ document.addEventListener("DOMContentLoaded", () => {
         const actionPart = match ? ACTION_MAP[match] : ACTION_MAP.default;
         
         const fileName = `${genderInit}_${species}_${actionPart}.jpg`;
+        const localPath = `/static/recipes/images/${fileName}`;
 
-        petImg.style.opacity = 0.4;
-        petImg.src = GITHUB_BASE + fileName;
-        
-        petImg.onload = () => petImg.style.opacity = 1;
-        
-        petImg.onerror = () => {
-            petImg.src = `${GITHUB_BASE}${genderInit}_${species}_design.jpg`;
-            petImg.style.opacity = 1;
-        };
+        if (petImg) {
+            petImg.style.opacity = 0.4;
+            petImg.src = localPath;
+            petImg.onload = () => petImg.style.opacity = 1;
+
+            petImg.onerror = () => {
+                petImg.onerror = null;
+                petImg.src = `/static/recipes/images/${genderInit}_${species}_design.jpg`;
+                petImg.style.opacity = 1;
+            };
+        }
     };
 
   const renderStep = () => {
