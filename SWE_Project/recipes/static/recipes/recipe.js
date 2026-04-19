@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
         petImg.onload = () => petImg.style.opacity = 1;
         
         petImg.onerror = () => {
-            petImg.src = `${GITHUB_BASE}${genderInit}_${species}_design.png`;
+            petImg.src = `${GITHUB_BASE}${genderInit}_${species}_design.jpg`;
             petImg.style.opacity = 1;
         };
     };
