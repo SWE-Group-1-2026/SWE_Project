@@ -542,7 +542,10 @@ def recipe_detail(request, id):
 
 
 def recipe_steps(request, id):
-    return render(request, "recipe_steps.html", _get_recipe_detail_context(id))
+    context = _get_recipe_detail_context(id)
+    if request.user.is_authenticated:
+        context["pet_profile"] = PetProfile.objects.filter(user=request.user).first()
+    return render(request, "recipe_steps.html", context)
 
 
 @login_required
