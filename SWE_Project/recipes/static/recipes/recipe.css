@@ -132,6 +132,7 @@ body {
 
 .step-progress {
   margin: 0 0 8px;
+  margin-top: 10px;
   color: #6c584c;
   font-size: 0.95rem;
   font-weight: bold;
@@ -245,4 +246,22 @@ body {
   border-radius: 50px;
   box-shadow: 0 0 10px rgba(138, 158, 86, 0.35);
   transition: width 0.35s ease;
+}
+
+.pet-display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #ffffff; 
+    border-radius: 12px;
+    margin-bottom: 20px;
+    min-height: 160px; 
+    border: 1px dashed #d6c9b0; 
+}
+
+.pet-image {
+    max-height: 140px;
+    width: auto;
+    transition: opacity 0.2s ease-in-out;
+    filter: drop-shadow(0 4px 8px rgba(74, 58, 46, 0.1));
 }
