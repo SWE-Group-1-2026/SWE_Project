@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "a pot":"POT",
         "a large pot":"POT",
         "wok":"PAN",
+        "scramble":"PAN",
         "mash":"WHISKING",
         "combine":"COMBINE",
         "season":"SEASONING",
