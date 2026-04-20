@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "blend": "BLENDING",
         "blend the soup": "POT",
         "blender": "BLENDING",
+        "a pan":"PAN",
         "sauté": "PAN",
         "garnish":"SEASONING",
         "sprinkle":"SEASONING",
