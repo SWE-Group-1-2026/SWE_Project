@@ -77,7 +77,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const timerReset = player.querySelector("[data-timer-reset]");
 
   const parseTimeFromStep = (text) => {
-    const normalized = text.replace(/(\d+)\s*[–—-]\s*(\d+)/g, '$2');
+    const normalized = text
+        .replace(/(\d+)\s*[–—-]\s*(\d+)/g, '$2')
+        .replace(/\ba\s+(?=min|sec|hour)/gi, '1 ')
+        .replace(/\banother\s+/gi, '1 ')
+        .replace(/\bhalf\s+a\s+/gi, '0.5 ');
+
     const patterns = [
         { regex: /(\d+)\s*hour[s]?\s*(?:and\s*)?(\d+)\s*(?:\w+\s*)?min(?:ute)?s?/i, fn: (m) => parseInt(m[1]) * 3600 + parseInt(m[2]) * 60 },
         { regex: /(\d+)\s*hour[s]?/i, fn: (m) => parseInt(m[1]) * 3600 },
