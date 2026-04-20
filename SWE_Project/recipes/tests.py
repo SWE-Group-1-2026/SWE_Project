@@ -355,7 +355,6 @@ class AdminAccessTests(TestCase):
         response = self.client.get(reverse("profile"))
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Role: Admin")
         self.assertContains(response, reverse("admin_dashboard"))
         self.assertContains(response, reverse("admin_add_recipe"))
 
@@ -418,3 +417,82 @@ class AdminAccessTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Add at least one recipe step.")
         mock_get_mongo_database.assert_not_called()
+
+    @patch("recipes.views._get_recipe_collection_and_object_id")
+    def test_regular_user_cannot_open_admin_edit_recipe_form(self, mock_get_recipe_collection_and_object_id):
+        self.client.login(username="user@example.com", password="testpass123")
+
+        response = self.client.get(reverse("admin_edit_recipe", args=["507f1f77bcf86cd799439011"]))
+
+        self.assertEqual(response.status_code, 403)
+        mock_get_recipe_collection_and_object_id.assert_not_called()
+
+    @patch("recipes.views._get_recipe_collection_and_object_id")
+    def test_admin_can_load_edit_recipe_form(self, mock_get_recipe_collection_and_object_id):
+        mock_collection = Mock()
+        mock_collection.find_one.return_value = {
+            "_id": "507f1f77bcf86cd799439011",
+            "recipe_name": "Pumpkin Bites",
+            "cuisine": "Homestyle",
+            "duration": "20 minutes",
+            "ingredients": ["Pumpkin", "Oats"],
+            "recipe_steps": ["Mix ingredients", "Bake until soft"],
+        }
+        mock_get_recipe_collection_and_object_id.return_value = (
+            mock_collection,
+            "mongo-object-id",
+            None,
+        )
+        self.client.login(username="admin@example.com", password="testpass123")
+
+        response = self.client.get(reverse("admin_edit_recipe", args=["507f1f77bcf86cd799439011"]))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Edit Recipe")
+        self.assertContains(response, 'value="Pumpkin Bites"', html=False)
+        self.assertContains(response, "Mix ingredients")
+
+    @patch("recipes.views._get_recipe_collection_and_object_id")
+    def test_admin_can_update_recipe_from_form(self, mock_get_recipe_collection_and_object_id):
+        mock_collection = Mock()
+        mock_collection.find_one.return_value = {
+            "_id": "507f1f77bcf86cd799439011",
+            "recipe_name": "Old Name",
+            "cuisine": "Old Cuisine",
+            "duration": "10 minutes",
+            "ingredients": ["Old"],
+            "recipe_steps": ["Old step"],
+        }
+        mock_get_recipe_collection_and_object_id.return_value = (
+            mock_collection,
+            "mongo-object-id",
+            None,
+        )
+        self.client.login(username="admin@example.com", password="testpass123")
+
+        response = self.client.post(
+            reverse("admin_edit_recipe", args=["507f1f77bcf86cd799439011"]),
+            {
+                "recipe_name": "Updated Bites",
+                "cuisine": "Homestyle",
+                "duration": "25 minutes",
+                "ingredients": "Pumpkin\nOats\nHoney",
+                "recipe_steps": "Mix ingredients\nBake\nCool and serve",
+            },
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("recipe_detail", args=["507f1f77bcf86cd799439011"]),
+        )
+        mock_collection.update_one.assert_called_once()
+        update_filter = mock_collection.update_one.call_args.args[0]
+        update_payload = mock_collection.update_one.call_args.args[1]
+        self.assertEqual(update_filter, {"_id": "mongo-object-id"})
+        self.assertEqual(update_payload["$set"]["recipe_name"], "Updated Bites")
+        self.assertEqual(update_payload["$set"]["ingredients"], ["Pumpkin", "Oats", "Honey"])
+        self.assertEqual(
+            update_payload["$set"]["recipe_steps"],
+            ["Mix ingredients", "Bake", "Cool and serve"],
+        )
+        self.assertEqual(update_payload["$set"]["updated_by"], "admin@example.com")

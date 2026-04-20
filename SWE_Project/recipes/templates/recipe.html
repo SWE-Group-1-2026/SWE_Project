@@ -40,6 +40,9 @@
                     <form action="{% url 'recipe_steps' recipe.id %}" method="get" class="start-form">
                         <button type="submit" class="step-button primary-button">Start Cooking</button>
                     </form>
+                    {% if request.user.is_staff or request.user.is_superuser %}
+                    <a href="{% url 'admin_edit_recipe' recipe.id %}" class="step-button secondary-button">Edit Recipe</a>
+                    {% endif %}
                     {% if request.user.is_authenticated %}
                     <form action="{% url 'toggle_saved_recipe' recipe.id %}" method="post" class="save-form">
                         {% csrf_token %}

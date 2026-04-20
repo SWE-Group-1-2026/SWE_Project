@@ -9,6 +9,7 @@ urlpatterns = [
     path("signup/", views.signup_view, name="signup"),
     path("admin-dashboard/", views.admin_dashboard, name="admin_dashboard"),
     path("admin-dashboard/recipes/new/", views.admin_add_recipe, name="admin_add_recipe"),
+    path("admin-dashboard/recipes/<str:id>/edit/", views.admin_edit_recipe, name="admin_edit_recipe"),
     path("verify-email/", views.verify_email_notice, name="verify_email_notice"),
     path(
         "verify-email/<uidb64>/<token>/",

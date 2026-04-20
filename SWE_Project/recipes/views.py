@@ -54,6 +54,37 @@ def _parse_multiline_list(raw_value):
     return [item.strip() for item in raw_value.splitlines() if item.strip()]
 
 
+def _build_recipe_form_context(recipe=None, error_message=None, success_message=None):
+    recipe = recipe or {}
+    return {
+        "error_message": error_message,
+        "success_message": success_message,
+        "form_values": {
+            "recipe_name": recipe.get("recipe_name", ""),
+            "cuisine": recipe.get("cuisine", ""),
+            "duration": recipe.get("duration", ""),
+            "ingredients": "\n".join(recipe.get("ingredients", [])),
+            "recipe_steps": "\n".join(recipe.get("recipe_steps", [])),
+        },
+    }
+
+
+def _get_recipe_collection_and_object_id(id):
+    collection, error_message = _get_recipe_collection()
+    if collection is None:
+        return None, None, error_message
+
+    try:
+        from bson.objectid import ObjectId
+    except ImportError:
+        return None, None, "Recipe editing is unavailable until MongoDB dependencies are installed."
+
+    try:
+        return collection, ObjectId(id), None
+    except Exception:
+        return None, None, "The recipe ID is invalid."
+
+
 def _get_mongo_client():
     try:
         import certifi
@@ -372,17 +403,7 @@ def admin_add_recipe(request):
     if denied_response is not None:
         return denied_response
 
-    context = {
-        "error_message": None,
-        "success_message": None,
-        "form_values": {
-            "recipe_name": "",
-            "cuisine": "",
-            "duration": "",
-            "ingredients": "",
-            "recipe_steps": "",
-        },
-    }
+    context = _build_recipe_form_context()
 
     if request.method == "POST":
         recipe_name = request.POST.get("recipe_name", "").strip()
@@ -437,6 +458,100 @@ def admin_add_recipe(request):
                     return redirect("recipe_detail", id=str(result.inserted_id))
 
     return render(request, "admin_recipe_form.html", context)
+
+
+@login_required
+def admin_edit_recipe(request, id):
+    denied_response = _require_admin(request)
+    if denied_response is not None:
+        return denied_response
+
+    collection, object_id, error_message = _get_recipe_collection_and_object_id(id)
+    if collection is None:
+        return render(
+            request,
+            "admin_recipe_form.html",
+            _build_recipe_form_context(error_message=error_message),
+        )
+
+    recipe = collection.find_one({"_id": object_id})
+    if not recipe:
+        return render(
+            request,
+            "admin_recipe_form.html",
+            _build_recipe_form_context(error_message="Recipe not found."),
+        )
+
+    context = _build_recipe_form_context(recipe)
+
+    if request.method == "POST":
+        recipe_name = request.POST.get("recipe_name", "").strip()
+        cuisine = request.POST.get("cuisine", "").strip()
+        duration = request.POST.get("duration", "").strip()
+        ingredients_raw = request.POST.get("ingredients", "").strip()
+        recipe_steps_raw = request.POST.get("recipe_steps", "").strip()
+
+        context = {
+            "recipe_id": id,
+            "is_edit_mode": True,
+            **_build_recipe_form_context(
+                {
+                    "recipe_name": recipe_name,
+                    "cuisine": cuisine,
+                    "duration": duration,
+                    "ingredients": _parse_multiline_list(ingredients_raw),
+                    "recipe_steps": _parse_multiline_list(recipe_steps_raw),
+                }
+            ),
+        }
+
+        ingredients = _parse_multiline_list(ingredients_raw)
+        recipe_steps = _parse_multiline_list(recipe_steps_raw)
+
+        if not recipe_name:
+            context["error_message"] = "Recipe name is required."
+        elif not cuisine:
+            context["error_message"] = "Cuisine is required."
+        elif not duration:
+            context["error_message"] = "Duration is required."
+        elif not ingredients:
+            context["error_message"] = "Add at least one ingredient."
+        elif not recipe_steps:
+            context["error_message"] = "Add at least one recipe step."
+        else:
+            try:
+                collection.update_one(
+                    {"_id": object_id},
+                    {
+                        "$set": {
+                            "recipe_name": recipe_name,
+                            "cuisine": cuisine,
+                            "duration": duration,
+                            "ingredients": ingredients,
+                            "recipe_steps": recipe_steps,
+                            "updated_by": request.user.email or request.user.username,
+                            "updated_at": timezone.now().isoformat(),
+                        }
+                    },
+                )
+            except Exception:
+                context["error_message"] = (
+                    "The recipe could not be updated right now. Please try again."
+                )
+            else:
+                return redirect("recipe_detail", id=id)
+
+        return render(request, "admin_recipe_form.html", context)
+
+    return render(
+        request,
+        "admin_recipe_form.html",
+        {
+            "recipe_id": id,
+            "is_edit_mode": True,
+            **context,
+        },
+    )
 
 
 def tutorial_view(request):

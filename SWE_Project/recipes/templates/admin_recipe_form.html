@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SousPaw - Add Recipe</title>
+  <title>SousPaw - {% if is_edit_mode %}Edit Recipe{% else %}Add Recipe{% endif %}</title>
   <link rel="stylesheet" href="{% static 'recipes/signup.css' %}">
 </head>
 <body>
@@ -25,8 +25,14 @@
 
   <div class="page">
     <div class="auth-card" style="max-width: 720px;">
-      <h1>Add Recipe</h1>
-      <p class="subtitle">Create a recipe using the same schema used by the recipe search and detail pages.</p>
+      <h1>{% if is_edit_mode %}Edit Recipe{% else %}Add Recipe{% endif %}</h1>
+      <p class="subtitle">
+        {% if is_edit_mode %}
+        Update a recipe using the same schema used by the recipe search and detail pages.
+        {% else %}
+        Create a recipe using the same schema used by the recipe search and detail pages.
+        {% endif %}
+      </p>
 
       <form method="post">
         {% csrf_token %}
@@ -61,11 +67,15 @@
           <p class="password-hint">Enter one recipe step per line.</p>
         </div>
 
-        <button type="submit" class="submit-btn">Save Recipe</button>
+        <button type="submit" class="submit-btn">{% if is_edit_mode %}Update Recipe{% else %}Save Recipe{% endif %}</button>
       </form>
 
       <p class="switch-link">
+        {% if is_edit_mode and recipe_id %}
+        Want to view the current recipe? <a href="{% url 'recipe_detail' recipe_id %}">Back to recipe</a>
+        {% else %}
         Need to review admin activity first? <a href="{% url 'admin_dashboard' %}">Back to dashboard</a>
+        {% endif %}
       </p>
     </div>
   </div>
