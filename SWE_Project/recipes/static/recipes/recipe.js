@@ -184,9 +184,24 @@ document.addEventListener("DOMContentLoaded", () => {
     prevButton.disabled = currentIndex === 0;
     nextButton.disabled = currentIndex === steps.length - 1;
     progressFill.style.width = `${percentComplete}%`;
-    updatePetImage(stepText);
-    if (timerBlock) timerBlock.style.display = "none";
-    setupTimer(stepText);
+    if (currentIndex === steps.length - 1) {
+        const fileName = `${genderInit}_${species}_SERVE.jpg`;
+        if (petImg) {
+            petImg.style.opacity = 0.4;
+            petImg.src = `/static/recipes/images/${fileName}`;
+            petImg.onload = () => petImg.style.opacity = 1;
+            petImg.onerror = () => {
+                petImg.onerror = null;
+                petImg.src = `/static/recipes/images/${genderInit}_${species}_design.jpg`;
+                petImg.style.opacity = 1;
+            };
+        }
+        if (timerBlock) timerBlock.style.display = "none";
+    } else {
+        if (timerBlock) timerBlock.style.display = "none";
+        setupTimer(stepText);
+        updatePetImage(stepText);
+    }
   };
 
   if (startButton && panel) {
