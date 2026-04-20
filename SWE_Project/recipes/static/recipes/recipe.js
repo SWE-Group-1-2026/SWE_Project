@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "rolling":"ROLLING",
         "mix":"WHISKING",
         "beat eggs":"WHISKING",
+        "beat butter":"WHISKING",
         "frost":"FROSTING",
         "mixer": "MIXER",
         "griddle": "GRIDDLE",
