@@ -1,0 +1,168 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SousPaw - Tutorial</title>
+  <link rel="stylesheet" href="{% static 'recipes/tutorial.css' %}">
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="{% url 'home' %}" class="navbar-brand">Sous<span>Paw</span></a>
+    <ul class="navbar-links">
+      <li><a href="{% url 'home' %}#features" class="navbar-cta">Features</a></li>
+      {% if not request.user.is_authenticated %}
+      <li><a href="{% url 'tutorial' %}" class="navbar-cta">How it works</a></li>
+      {% endif %}
+      <li><a href="{% url 'tutorial_page' %}" class="navbar-cta active-tab">Tutorial</a></li>
+      <li><a href="{% url 'search' %}" class="navbar-cta">Recipes</a></li>
+      {% if request.user.is_authenticated %}
+      <li><a href="{% url 'pet_customizer' %}" class="navbar-cta">Pet</a></li>
+      <li><a href="{% url 'profile' %}" class="navbar-cta">Profile</a></li>
+      <li>
+        <form method="post" action="{% url 'logout' %}" class="nav-form">
+          {% csrf_token %}
+          <button type="submit" class="nav-button navbar-cta">Log Out</button>
+        </form>
+      </li>
+      {% else %}
+      <li><a href="{% url 'signup' %}" class="navbar-cta">Sign Up</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+
+  <div class="tutorial-hero">
+    <h1>How to Use SousPaw</h1>
+    <p>Everything you need to get cooking with confidence.</p>
+  </div>
+
+  <div class="tutorial-wrapper">
+
+    <div class="tab-nav">
+      <button class="tab-btn active" id="tab-guide" onclick="switchTab('guide')">Written Guide</button>
+      <button class="tab-btn" id="tab-video" onclick="switchTab('video')">Video Demo</button>
+      <button class="tab-btn" id="tab-faq" onclick="switchTab('faq')">FAQ</button>
+    </div>
+
+    <!-- WRITTEN GUIDE -->
+    <section id="panel-guide" class="tab-panel active">
+      <div class="steps-grid">
+
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <div class="feature-icon-wrap feature-icon-orange">📋</div>
+          <h3>Create Your Account</h3>
+          <p>Click <strong>Sign Up</strong> in the top navigation. Fill in your email and a password. You'll receive a verification email — click the link inside to activate your account.</p>
+          <div class="step-tip"><span class="tip-label">Tip</span> Check your spam folder if the email doesn't arrive within a minute.</div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <div class="feature-icon-wrap feature-icon-brown">🐾</div>
+          <h3>Meet Your Pet</h3>
+          <p>After logging in, visit the <strong>Pet</strong> tab. Choose your companion's name and appearance. Your pet will cheer you on, set timers, and nudge you when something needs attention.</p>
+          <div class="step-tip"><span class="tip-label">Tip</span> Your pet's happiness grows as you complete recipes!</div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <div class="feature-icon-wrap feature-icon-gold">🌍</div>
+          <h3>Browse Recipes</h3>
+          <p>Head to the <strong>Recipes</strong> tab to explore dishes from Japan, Mexico, Italy, India, and beyond. Use the search bar to filter by ingredient or cuisine.</p>
+          <div class="step-tip"><span class="tip-label">Tip</span> Save favourites to your Profile for quick access later.</div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">04</div>
+          <div class="feature-icon-wrap feature-icon-orange">🍳</div>
+          <h3>Start Cooking</h3>
+          <p>Open any recipe and press <strong>Start Cooking</strong>. SousPaw breaks the recipe into clear, numbered steps. Your pet will alert you when timers end and celebrate each completed step.</p>
+          <div class="step-tip"><span class="tip-label">Tip</span> Keep your screen nearby — your pet sends live nudges as you cook.</div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">05</div>
+          <div class="feature-icon-wrap feature-icon-sage">⏱️</div>
+          <h3>Use Smart Reminders</h3>
+          <p>Within each step, tap the <strong>timer icon</strong> to start a countdown. SousPaw will alert you when it's time to stir, flip, or move on — so nothing gets burnt.</p>
+          <div class="step-tip"><span class="tip-label">Tip</span> Allow browser notifications for the best reminder experience.</div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">06</div>
+          <div class="feature-icon-wrap feature-icon-brown">👤</div>
+          <h3>Manage Your Profile</h3>
+          <p>Visit the <strong>Profile</strong> tab to view your cooking history, saved recipes, and pet stats. You can also update your email or password from this page.</p>
+          <div class="step-tip"><span class="tip-label">Tip</span> Your XP and badges are shown here — cook more to level up!</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- VIDEO DEMO -->
+    <section id="panel-video" class="tab-panel">
+      <p class="video-intro">Watch the walkthrough below to see SousPaw in action — from signing up to finishing your first recipe with your pet companion by your side.</p>
+
+      <div class="video-wrapper">
+        <iframe
+            src="https://www.youtube.com/embed/p8dQraD-McA"
+            title="SousPaw — Full Website Demo"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+        </iframe>
+      </div>
+
+    
+
+    <!-- FAQ -->
+    <section id="panel-faq" class="tab-panel">
+      <div class="faq-list">
+
+        <details class="faq-item">
+          <summary>Do I need an account to browse recipes?</summary>
+          <div class="faq-body">You can browse the recipe list without an account, but you'll need to log in to start cooking mode, save favourites, and interact with your pet companion.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>I didn't receive a verification email. What do I do?</summary>
+          <div class="faq-body">First, check your spam or junk folder. If it's not there, wait a minute and try signing up again with the same email. If the problem persists, contact us through the Profile page.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Can I use SousPaw on my phone?</summary>
+          <div class="faq-body">Yes! SousPaw is fully responsive and works on any modern smartphone browser. We recommend allowing notifications so your pet's reminders reach you while you're at the stove.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>How do timers work during a recipe?</summary>
+          <div class="faq-body">Each step that requires waiting has a built-in timer button. Tap it to start the countdown. When time is up, your pet companion will alert you — even if you've navigated to another tab (with notifications enabled).</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Can I add my own recipes?</summary>
+          <div class="faq-body">Custom recipe upload is on our roadmap! For now, you can explore our growing library of multi-cultural dishes curated by the SousPaw team.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>How do I reset my password?</summary>
+          <div class="faq-body">On the login page, click <strong>Forgot password?</strong> and enter your email. You'll receive a link to create a new password.</div>
+        </details>
+
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    function switchTab(name) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+      document.getElementById('tab-' + name).classList.add('active');
+      document.getElementById('panel-' + name).classList.add('active');
+    }
+  </script>
+
+</body>
+</html>

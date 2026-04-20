@@ -34,25 +34,35 @@
         </section>
         {% else %}
         <section class="recipe-card">
-            <p class="eyebrow">{{ recipe.cuisine }}</p>
-            <h1>{{ recipe.recipe_name }}</h1>
-            <p class="duration">⏱️ {{ recipe.duration }}</p>
-
+            <div class="recipe-header-row">
+                <div class="recipe-header-text">
+                    <p class="eyebrow">{{ recipe.cuisine }}</p>
+                    <h1>{{ recipe.recipe_name }}</h1>
+                    <p class="duration">⏱️ {{ recipe.duration }}</p>
+                </div>
+                {% if request.user.is_authenticated %} 
+                <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                    <div class="pet-display" 
+                        id="pet-config" 
+                        data-gender="{{ pet_profile.gender }}" 
+                        data-species="{{ pet_profile.species }}">
+                        <img id="sous-paw-pet" src="" alt="Sous-Chef Pet" class="pet-image">
+                    </div>
+                </div>
+                {% endif %}
+            </div>
             <section class="step-player" data-step-player>
                 <div class="step-player-panel" data-step-panel>
-                   {% if request.user.is_authenticated %} 
-                    <div style="display: flex; justify-content: center; margin-bottom: 20px;">
-                        <div class="pet-display" 
-                            id="pet-config" 
-                            data-gender="{{ pet_profile.gender }}" 
-                            data-species="{{ pet_profile.species }}">
-                            <img id="sous-paw-pet" src="" alt="Sous-Chef Pet" class="pet-image">
-                        </div>
-                    </div>
-                    {% endif %}
                     <p class="step-progress" data-step-progress aria-live="polite"></p>
                     <p class="step-current" data-step-current></p>
-
+                    <div class="step-timer" data-step-timer style="display:none;">
+                        <p class="timer-label" data-timer-label></p>
+                        <p class="timer-display" data-timer-display>00:00</p>
+                        <div class="timer-actions">
+                            <button type="button" class="step-button primary-button" data-timer-toggle>Start Timer</button>
+                            <button type="button" class="step-button ghost-button" data-timer-reset>Reset</button>
+                        </div>
+                    </div>
                     <p class="progress-percent" data-progress-percent aria-live="polite"></p>
                     <div
                         class="progress-bar-container"

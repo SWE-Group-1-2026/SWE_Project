@@ -663,6 +663,9 @@ def recipe_steps(request, id):
     return render(request, "recipe_steps.html", context)
 
 
+def tutorial(request):
+    return render(request, "tutorial.html")
+
 @login_required
 def toggle_saved_recipe(request, id):
     if request.method != "POST":

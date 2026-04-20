@@ -9,24 +9,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const ACTION_MAP = {
         "shredded":"SHREDDING",
+        "a pot":"POT",
+        "a large pot":"POT",
+        "wok":"PAN",
+        "scramble":"PAN",
+        "mash":"WHISKING",
         "combine":"COMBINE",
         "season":"SEASONING",
+        "seasoning":"SEASONING",
+        "skillet":"PAN",
         "serve": "SERVE",
         "whisk": "WHISKING",
         "rolling":"ROLLING",
-        "roll":"ROLLING",
         "mix":"WHISKING",
         "beat eggs":"WHISKING",
         "beat butter":"WHISKING",
         "frost":"FROSTING",
+        "frosting the cake":"FROSTING",
         "mixer": "MIXER",
+        "mixing":"MIXER",
         "griddle": "GRIDDLE",
         "toast the bread": "TOASTER",
+        "toast bread":"TOASTER",
+        "toast burger buns": "TOASTER",
+        "toast pecans":"OVEN",
         "blend": "BLENDING",
         "blend the soup": "POT",
         "blender": "BLENDING",
         "a pan":"PAN",
-        "sauté": "PAN",
         "garnish":"SEASONING",
         "sprinkle":"SEASONING",
         "bake": "OVEN",
@@ -36,6 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "cut": "CHOPPING",
         "stir":"POT",
         "boil":"POT",
+        "boiling":"POT",
         "default": "design" 
   };
 
@@ -59,13 +70,104 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const petImg = document.getElementById('sous-paw-pet');
   let currentIndex = 0;
+  let timerInterval = null;
+  let timerRemaining = 0;
+  let timerTotal = 0;
+  let timerRunning = false;
+
+  const timerBlock = player.querySelector("[data-step-timer]");
+  const timerDisplay = player.querySelector("[data-timer-display]");
+  const timerLabel = player.querySelector("[data-timer-label]");
+  const timerToggle = player.querySelector("[data-timer-toggle]");
+  const timerReset = player.querySelector("[data-timer-reset]");
+
+  const parseTimeFromStep = (text) => {
+    const normalized = text
+        .replace(/(\d+)\s*[–—-]\s*(\d+)/g, '$2')
+        .replace(/\ba\s+(?=min|sec|hour)/gi, '1 ')
+        .replace(/\banother\s+/gi, '1 ')
+        .replace(/\bhalf\s+a\s+/gi, '0.5 ');
+
+    const patterns = [
+        { regex: /(\d+)\s*hour[s]?\s*(?:and\s*)?(\d+)\s*(?:\w+\s*)?min(?:ute)?s?/i, fn: (m) => parseInt(m[1]) * 3600 + parseInt(m[2]) * 60 },
+        { regex: /(\d+)\s*hour[s]?/i, fn: (m) => parseInt(m[1]) * 3600 },
+        { regex: /(\d+)\s*(?:\w+\s*)?min(?:ute)?s?/i, fn: (m) => parseInt(m[1]) * 60 },
+        { regex: /(\d+)\s*(?:\w+\s*)?sec(?:ond)?s?/i, fn: (m) => parseInt(m[1]) },
+    ];
+    for (const { regex, fn } of patterns) {
+        const match = normalized.match(regex);
+        if (match) return fn(match);
+    }
+    return null;
+  };
+
+  const formatTime = (seconds) => {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+    if (h > 0) return `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+    return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+  };
+
+  const stopTimer = () => {
+    clearInterval(timerInterval);
+    timerInterval = null;
+    timerRunning = false;
+    if (timerToggle) timerToggle.textContent = "Start Timer";
+  };
+
+  const resetTimer = () => {
+    stopTimer();
+    timerRemaining = timerTotal;
+    if (timerDisplay) timerDisplay.textContent = formatTime(timerRemaining);
+  };
+
+  const setupTimer = (stepText) => {
+    stopTimer();
+    const seconds = parseTimeFromStep(stepText);
+    if (!seconds || !timerBlock) return;
+    timerTotal = seconds;
+    timerRemaining = seconds;
+    timerBlock.style.display = "block";
+    timerLabel.textContent = `Detected: ${formatTime(seconds)}`;
+    timerDisplay.textContent = formatTime(timerRemaining);
+    timerToggle.textContent = "Start Timer";
+  };
+
+  timerToggle && timerToggle.addEventListener("click", () => {
+    if (timerRunning) {
+        stopTimer();
+    } else {
+        if (timerRemaining <= 0) timerRemaining = timerTotal;
+        timerRunning = true;
+        timerToggle.textContent = "Pause";
+        timerInterval = setInterval(() => {
+            timerRemaining -= 1;
+            timerDisplay.textContent = formatTime(timerRemaining);
+            if (timerRemaining <= 0) {
+                stopTimer();
+                timerToggle.textContent = "Done!";
+                timerToggle.disabled = true;
+            }
+        }, 1000);
+    }
+  });
+
+  timerReset && timerReset.addEventListener("click", () => {
+    timerToggle.disabled = false;
+    resetTimer();
+  });
 
   const updatePetImage = (text) => {
         const lowerText = text.toLowerCase();
 
         const match = Object.keys(ACTION_MAP)
             .sort((a, b) => b.length - a.length)
-            .find(key => lowerText.includes(key.toLowerCase()));
+            .find(key => {
+              const escaped = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+              const regex = new RegExp(`\\b${escaped}\\b`, 'i');
+              return regex.test(lowerText);
+            });
             
         const actionPart = match ? ACTION_MAP[match] : ACTION_MAP.default;
         
@@ -83,7 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 petImg.style.opacity = 1;
             };
         }
-    };
+  };
 
   const renderStep = () => {
     const percentComplete = Math.round(((currentIndex + 1) / steps.length) * 100);
@@ -94,7 +196,25 @@ document.addEventListener("DOMContentLoaded", () => {
     prevButton.disabled = currentIndex === 0;
     nextButton.disabled = currentIndex === steps.length - 1;
     progressFill.style.width = `${percentComplete}%`;
-    updatePetImage(stepText);
+    if (currentIndex === steps.length - 1) {
+        const fileName = `${genderInit}_${species}_SERVE.jpg`;
+        if (petImg) {
+            petImg.style.opacity = 0.4;
+            petImg.src = `/static/recipes/images/${fileName}`;
+            petImg.onload = () => petImg.style.opacity = 1;
+            petImg.onerror = () => {
+                petImg.onerror = null;
+                petImg.src = `/static/recipes/images/${genderInit}_${species}_design.jpg`;
+                petImg.style.opacity = 1;
+            };
+        }
+        if (timerBlock) timerBlock.style.display = "none";
+        setupTimer(stepText);
+    } else {
+        if (timerBlock) timerBlock.style.display = "none";
+        setupTimer(stepText);
+        updatePetImage(stepText);
+    }
   };
 
   if (startButton && panel) {
