@@ -272,7 +272,7 @@ body {
 
 .pet-image {
     max-height: 280px;
-    min-width: 200px;
+    min-width: 180px;
     width: auto;
     transition: opacity 0.2s ease-in-out;
     filter: drop-shadow(0 4px 8px rgba(74, 58, 46, 0.1));
