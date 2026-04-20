@@ -228,6 +228,18 @@ body {
   }
 }
 
+.recipe-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.recipe-header-text {
+    flex: 1;
+}
+
 .progress-bar-container {
   width: 100%;
   height: 16px;
@@ -259,7 +271,7 @@ body {
 }
 
 .pet-image {
-    max-height: 220px;
+    max-height: 280px;
     width: auto;
     transition: opacity 0.2s ease-in-out;
     filter: drop-shadow(0 4px 8px rgba(74, 58, 46, 0.1));
