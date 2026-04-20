@@ -8,7 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const species = petConfig.getAttribute("data-species").toUpperCase();
 
   const ACTION_MAP = {
-        "season":"SEASONING"
+        "shredded":"SHREDDING",
+        "season":"SEASONING",
         "serve": "SERVE",
         "whisk": "WHISKING",
         "rolling":"ROLLING",
