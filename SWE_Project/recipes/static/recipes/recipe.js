@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "mash":"WHISKING",
         "combine":"COMBINE",
         "season":"SEASONING",
+        "seasoning":"SEASONING",
         "skillet":"PAN",
         "serve": "SERVE",
         "whisk": "WHISKING",
