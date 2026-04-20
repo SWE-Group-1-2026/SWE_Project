@@ -79,10 +79,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const parseTimeFromStep = (text) => {
     const normalized = text.replace(/(\d+)\s*[–—-]\s*(\d+)/g, '$2');
     const patterns = [
-        { regex: /(\d+)\s*hour[s]?\s*(?:and\s*)?(\d+)\s*min(?:ute)?s?/i, fn: (m) => parseInt(m[1]) * 3600 + parseInt(m[2]) * 60 },
+        { regex: /(\d+)\s*hour[s]?\s*(?:and\s*)?(\d+)\s*(?:\w+\s*)?min(?:ute)?s?/i, fn: (m) => parseInt(m[1]) * 3600 + parseInt(m[2]) * 60 },
         { regex: /(\d+)\s*hour[s]?/i, fn: (m) => parseInt(m[1]) * 3600 },
-        { regex: /(\d+)\s*min(?:ute)?s?/i, fn: (m) => parseInt(m[1]) * 60 },
-        { regex: /(\d+)\s*sec(?:ond)?s?/i, fn: (m) => parseInt(m[1]) },
+        { regex: /(\d+)\s*(?:\w+\s*)?min(?:ute)?s?/i, fn: (m) => parseInt(m[1]) * 60 },
+        { regex: /(\d+)\s*(?:\w+\s*)?sec(?:ond)?s?/i, fn: (m) => parseInt(m[1]) },
     ];
     for (const { regex, fn } of patterns) {
         const match = text.match(regex);
