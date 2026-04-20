@@ -1,10 +1,14 @@
+/* tutorial.css — matches home.css / index.css styling */
+
 body {
   font-family: Arial, sans-serif;
-  background: linear-gradient(180deg, #f0ead2 0%, #f8f5ea 100%);
+  background: linear-gradient(180deg, #f0ead2 0%, #dde5b6 100%);
   color: #4a3a2e;
   margin: 0;
+  min-height: 100vh;
 }
 
+/* ── Navbar — identical to home.css ── */
 .navbar {
   background-color: #6c584c;
   padding: 14px 40px;
@@ -27,8 +31,8 @@ body {
 .navbar-links {
   list-style: none;
   display: flex;
-  gap: 18px;
   align-items: center;
+  gap: 18px;
   margin: 0;
   padding: 0;
 }
@@ -52,7 +56,13 @@ body {
 
 .navbar-cta:hover {
   background-color: #8A9E56;
-  text-decoration: none;
+  text-decoration: none !important;
+}
+
+.active-tab {
+  background-color: #8A9E56 !important;
+  outline: 2px solid #f0ead2;
+  outline-offset: 2px;
 }
 
 .nav-form {
@@ -76,7 +86,6 @@ body {
 
 .nav-button:hover {
   background-color: #8A9E56;
-  text-decoration: none;
 }
 
 .nav-button:focus-visible {
@@ -84,49 +93,273 @@ body {
   outline-offset: 2px;
 }
 
-.tutorial-shell {
-  max-width: 1080px;
-  margin: 0 auto;
-  padding: 56px 20px 80px;
+/* ── Hero ── */
+.tutorial-hero {
+  text-align: center;
+  padding: 56px 24px 40px;
 }
 
-.hero {
-  max-width: 760px;
+.tutorial-hero h1 {
+  font-size: 2.1rem;
+  font-weight: bold;
+  color: #4a3a2e;
+  margin: 0 0 12px;
+}
+
+.tutorial-hero p {
+  font-size: 1.1rem;
+  color: #6c584c;
+  margin: 0;
+}
+
+/* ── Wrapper ── */
+.tutorial-wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px 64px;
+}
+
+/* ── Tab Nav ── */
+.tab-nav {
+  display: flex;
+  gap: 10px;
+  border-bottom: 2px solid #c5ba9f;
   margin-bottom: 36px;
 }
 
-.eyebrow {
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: #adc178;
+.tab-btn {
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  padding: 10px 22px;
+  font-family: Arial, sans-serif;
+  font-size: 0.95rem;
   font-weight: bold;
+  color: #6c584c;
+  cursor: pointer;
+  border-radius: 6px 6px 0 0;
+  transition: background-color 0.2s, border-color 0.2s;
 }
 
-.lead {
-  font-size: 1.1rem;
-  line-height: 1.7;
+.tab-btn:hover {
+  background-color: rgba(108, 88, 76, 0.08);
 }
 
-.steps {
+.tab-btn.active {
+  color: #4a3a2e;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-bottom-color: #ADC178;
+}
+
+/* ── Tab Panels ── */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── Step Cards — matches .customizer / .pet-card from home.css ── */
+.steps-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 28px;
 }
 
 .step-card {
-  background: white;
-  border-radius: 18px;
-  padding: 28px;
-  box-shadow: 0 14px 36px rgba(74, 58, 46, 0.1);
+  background: rgba(255, 255, 255, 0.88);
+  border-radius: 22px;
+  padding: 32px;
+  box-shadow: 0 16px 40px rgba(108, 88, 76, 0.15);
+  position: relative;
+  transition: box-shadow 0.2s, transform 0.2s;
 }
 
-.step-number {
-  display: inline-flex;
-  width: 38px;
-  height: 38px;
-  border-radius: 999px;
+.step-card:hover {
+  box-shadow: 0 20px 48px rgba(108, 88, 76, 0.22);
+  transform: translateY(-2px);
+}
+
+.step-num {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #e8dfc8;
+  line-height: 1;
+  user-select: none;
+}
+
+/* Feature icon styles — same as home page */
+.feature-icon-wrap {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  background: #dde5b6;
+  font-size: 1.6rem;
+  margin-bottom: 16px;
+}
+
+.feature-icon-orange { background-color: #f4d6b0; }
+.feature-icon-gold   { background-color: #e8d88a; }
+.feature-icon-brown  { background-color: #c9b49a; }
+.feature-icon-sage   { background-color: #c5d4a0; }
+
+.step-card h3 {
+  font-size: 1.05rem;
   font-weight: bold;
+  color: #4a3a2e;
+  margin: 0 0 10px;
+}
+
+.step-card p {
+  font-size: 0.93rem;
+  color: #6c584c;
+  line-height: 1.65;
+  margin: 0 0 16px;
+}
+
+.step-tip {
+  background: #f0ead2;
+  border-left: 3px solid #ADC178;
+  border-radius: 0 8px 8px 0;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  color: #4a3a2e;
+  line-height: 1.5;
+}
+
+.tip-label {
+  font-weight: bold;
+  color: #8A9E56;
+  margin-right: 4px;
+}
+
+/* ── Video Panel ── */
+.video-intro {
+  max-width: 680px;
+  margin: 0 auto 28px;
+  text-align: center;
+  color: #6c584c;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.video-wrapper {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border-radius: 22px;
+  background: #1a1a1a;
+  max-width: 860px;
+  margin: 0 auto 32px;
+  box-shadow: 0 16px 40px rgba(108, 88, 76, 0.2);
+}
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border: none;
+}
+
+.video-chapters {
+  max-width: 560px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.88);
+  border-radius: 22px;
+  padding: 24px 28px;
+  box-shadow: 0 16px 40px rgba(108, 88, 76, 0.15);
+}
+
+.video-chapters h3 {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #4a3a2e;
+  margin: 0 0 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.video-chapters ul { list-style: none; margin: 0; padding: 0; }
+
+.video-chapters li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 0;
+  border-bottom: 1px solid #e8dfc8;
+  font-size: 0.92rem;
+  color: #6c584c;
+}
+
+.video-chapters li:last-child { border-bottom: none; }
+
+.timestamp {
+  min-width: 3rem;
+  font-weight: bold;
+  color: #8A9E56;
+  font-size: 0.85rem;
+}
+
+/* ── FAQ Panel ── */
+.faq-list {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  background: rgba(255, 255, 255, 0.88);
+  border-radius: 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 8px 24px rgba(108, 88, 76, 0.1);
+  overflow: hidden;
+}
+
+.faq-item summary {
+  cursor: pointer;
+  padding: 18px 24px;
+  font-size: 0.97rem;
+  font-weight: bold;
+  color: #4a3a2e;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  transition: background 0.15s;
+}
+
+.faq-item summary:hover { background: rgba(173, 193, 120, 0.12); }
+.faq-item summary::-webkit-details-marker { display: none; }
+
+.faq-item summary::after {
+  content: '+';
+  font-size: 1.4rem;
+  font-weight: normal;
+  color: #ADC178;
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+
+.faq-item[open] summary::after { transform: rotate(45deg); }
+
+.faq-item .faq-body {
+  padding: 14px 24px 20px;
+  font-size: 0.92rem;
+  color: #6c584c;
+  line-height: 1.65;
+  border-top: 1px solid #e8dfc8;
+}
+
+.faq-item .faq-body strong { color: #4a3a2e; }
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .tutorial-hero h1 { font-size: 1.5rem; }
+  .tab-btn          { font-size: 0.85rem; padding: 8px 14px; }
+  .steps-grid       { grid-template-columns: 1fr; }
+  .navbar           { padding: 14px 20px; }
+  .navbar-links     { gap: 10px; }
 }
