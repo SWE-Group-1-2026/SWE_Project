@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const species = petConfig.getAttribute("data-species").toUpperCase();
 
   const ACTION_MAP = {
+        "season":"SEASONING"
         "serve": "SERVE",
         "whisk": "WHISKING",
         "rolling":"ROLLING",
@@ -18,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "griddle": "GRIDDLE",
         "toast the bread": "TOASTER",
         "blend": "BLENDING",
+        "blend the soup": "POT",
         "blender": "BLENDING",
         "sauté": "PAN",
         "garnish":"SEASONING",
