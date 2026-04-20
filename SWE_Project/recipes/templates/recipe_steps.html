@@ -55,7 +55,14 @@
                 <div class="step-player-panel" data-step-panel>
                     <p class="step-progress" data-step-progress aria-live="polite"></p>
                     <p class="step-current" data-step-current></p>
-
+                    <div class="step-timer" data-step-timer style="display:none;">
+                        <p class="timer-label" data-timer-label></p>
+                        <p class="timer-display" data-timer-display>00:00</p>
+                        <div class="timer-actions">
+                            <button type="button" class="step-button primary-button" data-timer-toggle>Start Timer</button>
+                            <button type="button" class="step-button ghost-button" data-timer-reset>Reset</button>
+                        </div>
+                    </div>
                     <p class="progress-percent" data-progress-percent aria-live="polite"></p>
                     <div
                         class="progress-bar-container"
