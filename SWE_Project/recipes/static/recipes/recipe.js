@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "cut": "CHOPPING",
         "stir":"POT",
         "boil":"POT",
+        "boiling":"POT",
         "default": "design" 
   };
 
