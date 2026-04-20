@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "mixing":"MIXER",
         "griddle": "GRIDDLE",
         "toast the bread": "TOASTER",
+        "toast bread":"TOASTER",
         "toast burger buns": "TOASTER",
         "toast pecans":"OVEN",
         "blend": "BLENDING",
