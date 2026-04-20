@@ -21,7 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
         "serve": "SERVE",
         "whisk": "WHISKING",
         "rolling":"ROLLING",
-        "roll":"ROLLING",
         "mix":"WHISKING",
         "beat eggs":"WHISKING",
         "beat butter":"WHISKING",
