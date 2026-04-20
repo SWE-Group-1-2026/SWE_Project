@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
         { regex: /(\d+)\s*(?:\w+\s*)?sec(?:ond)?s?/i, fn: (m) => parseInt(m[1]) },
     ];
     for (const { regex, fn } of patterns) {
-        const match = text.match(regex);
+        const match = normalized.match(regex);
         if (match) return fn(match);
     }
     return null;
