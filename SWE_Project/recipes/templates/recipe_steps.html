@@ -37,19 +37,18 @@
             <p class="eyebrow">{{ recipe.cuisine }}</p>
             <h1>{{ recipe.recipe_name }}</h1>
             <p class="duration">⏱️ {{ recipe.duration }}</p>
-
+            {% if request.user.is_authenticated %} 
+                <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                    <div class="pet-display" 
+                        id="pet-config" 
+                        data-gender="{{ pet_profile.gender }}" 
+                        data-species="{{ pet_profile.species }}">
+                        <img id="sous-paw-pet" src="" alt="Sous-Chef Pet" class="pet-image">
+                    </div>
+                </div>
+            {% endif %}
             <section class="step-player" data-step-player>
                 <div class="step-player-panel" data-step-panel>
-                   {% if request.user.is_authenticated %} 
-                    <div style="display: flex; justify-content: center; margin-bottom: 20px;">
-                        <div class="pet-display" 
-                            id="pet-config" 
-                            data-gender="{{ pet_profile.gender }}" 
-                            data-species="{{ pet_profile.species }}">
-                            <img id="sous-paw-pet" src="" alt="Sous-Chef Pet" class="pet-image">
-                        </div>
-                    </div>
-                    {% endif %}
                     <p class="step-progress" data-step-progress aria-live="polite"></p>
                     <p class="step-current" data-step-current></p>
 
