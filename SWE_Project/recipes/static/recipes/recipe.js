@@ -147,7 +147,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const match = Object.keys(ACTION_MAP)
             .sort((a, b) => b.length - a.length)
-            .find(key => lowerText.includes(key.toLowerCase()));
+            .find(key => {
+              const escaped = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+              const regex = new RegExp(`\\b${escaped}\\b`, 'i');
+              return regex.test(lowerText);
+            });
             
         const actionPart = match ? ACTION_MAP[match] : ACTION_MAP.default;
         
