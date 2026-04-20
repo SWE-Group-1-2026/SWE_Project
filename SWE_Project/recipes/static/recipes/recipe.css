@@ -254,9 +254,8 @@ body {
     align-items: center;
     background: #ffffff; 
     border-radius: 12px;
-    margin-bottom: 20px;
-    min-height: 160px; 
     border: 1px dashed #d6c9b0; 
+    padding: 12px;
 }
 
 .pet-image {
