@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const ACTION_MAP = {
         "shredded":"SHREDDING",
+        "a pot":"POT",
         "mash":"WHISKING",
         "combine":"COMBINE",
         "season":"SEASONING",
@@ -30,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
         "blend the soup": "POT",
         "blender": "BLENDING",
         "a pan":"PAN",
-        "sauté": "PAN",
         "garnish":"SEASONING",
         "sprinkle":"SEASONING",
         "bake": "OVEN",
