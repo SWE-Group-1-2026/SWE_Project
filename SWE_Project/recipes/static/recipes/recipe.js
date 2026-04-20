@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const ACTION_MAP = {
         "shredded":"SHREDDING",
+        "mash":"WHISKING",
         "combine":"COMBINE",
         "season":"SEASONING",
         "serve": "SERVE",
