@@ -34,10 +34,13 @@
         </section>
         {% else %}
         <section class="recipe-card">
-            <p class="eyebrow">{{ recipe.cuisine }}</p>
-            <h1>{{ recipe.recipe_name }}</h1>
-            <p class="duration">⏱️ {{ recipe.duration }}</p>
-            {% if request.user.is_authenticated %} 
+            <div class="recipe-header-row">
+                <div class="recipe-header-text">
+                    <p class="eyebrow">{{ recipe.cuisine }}</p>
+                    <h1>{{ recipe.recipe_name }}</h1>
+                    <p class="duration">⏱️ {{ recipe.duration }}</p>
+                </div>
+                {% if request.user.is_authenticated %} 
                 <div style="display: flex; justify-content: center; margin-bottom: 20px;">
                     <div class="pet-display" 
                         id="pet-config" 
@@ -46,7 +49,8 @@
                         <img id="sous-paw-pet" src="" alt="Sous-Chef Pet" class="pet-image">
                     </div>
                 </div>
-            {% endif %}
+                {% endif %}
+            </div>
             <section class="step-player" data-step-player>
                 <div class="step-player-panel" data-step-panel>
                     <p class="step-progress" data-step-progress aria-live="polite"></p>
