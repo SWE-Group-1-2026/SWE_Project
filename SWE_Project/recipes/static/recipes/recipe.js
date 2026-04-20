@@ -60,6 +60,87 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const petImg = document.getElementById('sous-paw-pet');
   let currentIndex = 0;
+  let timerInterval = null;
+  let timerRemaining = 0;
+  let timerTotal = 0;
+  let timerRunning = false;
+
+  const timerBlock = player.querySelector("[data-step-timer]");
+  const timerDisplay = player.querySelector("[data-timer-display]");
+  const timerLabel = player.querySelector("[data-timer-label]");
+  const timerToggle = player.querySelector("[data-timer-toggle]");
+  const timerReset = player.querySelector("[data-timer-reset]");
+
+  const parseTimeFromStep = (text) => {
+    const patterns = [
+        { regex: /(\d+)\s*hour[s]?\s*(?:and\s*)?(\d+)\s*min(?:ute)?s?/i, fn: (m) => parseInt(m[1]) * 3600 + parseInt(m[2]) * 60 },
+        { regex: /(\d+)\s*hour[s]?/i, fn: (m) => parseInt(m[1]) * 3600 },
+        { regex: /(\d+)\s*min(?:ute)?s?/i, fn: (m) => parseInt(m[1]) * 60 },
+        { regex: /(\d+)\s*sec(?:ond)?s?/i, fn: (m) => parseInt(m[1]) },
+    ];
+    for (const { regex, fn } of patterns) {
+        const match = text.match(regex);
+        if (match) return fn(match);
+    }
+    return null;
+  };
+
+  const formatTime = (seconds) => {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+    if (h > 0) return `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+    return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+  };
+
+  const stopTimer = () => {
+    clearInterval(timerInterval);
+    timerInterval = null;
+    timerRunning = false;
+    if (timerToggle) timerToggle.textContent = "Start Timer";
+  };
+
+  const resetTimer = () => {
+    stopTimer();
+    timerRemaining = timerTotal;
+    if (timerDisplay) timerDisplay.textContent = formatTime(timerRemaining);
+  };
+
+  const setupTimer = (stepText) => {
+    stopTimer();
+    const seconds = parseTimeFromStep(stepText);
+    if (!seconds || !timerBlock) return;
+    timerTotal = seconds;
+    timerRemaining = seconds;
+    timerBlock.style.display = "block";
+    timerLabel.textContent = `Detected: ${formatTime(seconds)}`;
+    timerDisplay.textContent = formatTime(timerRemaining);
+    timerToggle.textContent = "Start Timer";
+  };
+
+  timerToggle && timerToggle.addEventListener("click", () => {
+    if (timerRunning) {
+        stopTimer();
+    } else {
+        if (timerRemaining <= 0) timerRemaining = timerTotal;
+        timerRunning = true;
+        timerToggle.textContent = "Pause";
+        timerInterval = setInterval(() => {
+            timerRemaining -= 1;
+            timerDisplay.textContent = formatTime(timerRemaining);
+            if (timerRemaining <= 0) {
+                stopTimer();
+                timerToggle.textContent = "Done!";
+                timerToggle.disabled = true;
+            }
+        }, 1000);
+    }
+  });
+
+  timerReset && timerReset.addEventListener("click", () => {
+    timerToggle.disabled = false;
+    resetTimer();
+  });
 
   const updatePetImage = (text) => {
         const lowerText = text.toLowerCase();
@@ -84,7 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 petImg.style.opacity = 1;
             };
         }
-    };
+  };
 
   const renderStep = () => {
     const percentComplete = Math.round(((currentIndex + 1) / steps.length) * 100);
@@ -96,6 +177,8 @@ document.addEventListener("DOMContentLoaded", () => {
     nextButton.disabled = currentIndex === steps.length - 1;
     progressFill.style.width = `${percentComplete}%`;
     updatePetImage(stepText);
+    if (timerBlock) timerBlock.style.display = "none";
+    setupTimer(stepText);
   };
 
   if (startButton && panel) {
