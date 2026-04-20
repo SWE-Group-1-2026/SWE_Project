@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "mash":"WHISKING",
         "combine":"COMBINE",
         "season":"SEASONING",
+        "skillet":"PAN",
         "serve": "SERVE",
         "whisk": "WHISKING",
         "rolling":"ROLLING",
